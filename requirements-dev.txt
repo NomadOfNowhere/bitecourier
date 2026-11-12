@@ -1,0 +1,4 @@
+# Only needed locally to regenerate the images in static/images/ (see generate_images.py).
+# Kept out of requirements.txt so the Railway build stays small.
+-r requirements.txt
+playwright>=1.40

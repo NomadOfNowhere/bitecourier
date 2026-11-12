@@ -32,7 +32,7 @@
 
     <fieldset class="form-section">
       <legend class="form-section__title">Payment</legend>
-      <p class="form-section__hint">We only store the last four digits of the card. This is a demo — no charge is made.</p>
+      <p class="form-section__hint">We only store the last four digits of the card.</p>
       <div class="form-grid">
         {{ form_field(form, "card_number", "Card number", "cc-number", placeholder="4242 4242 4242 4242", inputmode="numeric") }}
         {{ form_field(form, "card_expiry", "Expiration (MM/YY)", "cc-exp", placeholder="08/27", inputmode="numeric") }}

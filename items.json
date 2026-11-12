@@ -90,7 +90,8 @@
     "protein_g": 28,
     "carbs_g": 40,
     "fat_g": 11,
-    "image_filename": "gb_03.png"
+    "image_filename": "gb_03.png",
+    "default_quantity": 2
   },
 
   

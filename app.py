@@ -125,27 +125,22 @@ def restaurant(slug: str):
 
 # --- 3. Add to cart ----------------------------------------------------------
 
-@app.post("/add-to-cart")
+@app.route("/add-to-cart", methods=["POST"])
 def add_to_cart():
-    data = request_data()
-    item = catalog.item(str(data.get("item_id", "")))
-
+    item_id = _form_value("item_id") or ""
+    item = catalog.item(item_id)
     if item is None:
-        message = "That item isn't on the menu."
-        if wants_json():
-            return jsonify(error=message), 400
-        flash(message, "error")
-        return redirect(url_for("index"))
-
-    quantity = max(1, parse_int(data.get("quantity"), default=1))
-    cart.add_item(item["item_id"], quantity)
-
-    if wants_json():
-        return jsonify(item_id=item["item_id"], name=item["name"], cart_count=cart.item_count())
-
-    flash(f"Added {item['name']} to your cart.", "success")
-    owner = catalog.restaurant(item["restaurant_id"])
-    return redirect(url_for("restaurant", slug=owner["slug"]))
+        return _answer(error="That dish is no longer available.", status=400)
+    # Items can declare a default_quantity (portion-locked bowls ship as a pair).
+    # Normal items fall back to 1.
+    default_qty = item.get("default_quantity", 1)
+    quantity = _parse_int(_form_value("quantity"), default=default_qty, minimum=1)
+    cart.add_item(item_id, quantity)
+    return _answer(
+        data={"name": item["name"], "cart_count": cart.item_count()},
+        redirect_to=request.referrer or url_for("index"),
+        flash_message=f"Added {item['name']} to your cart.",
+    )
 
 
 @app.post("/cart/update")

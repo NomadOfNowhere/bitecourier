@@ -29,7 +29,7 @@
       <img class="menu-item__image"
            src="{{ url_for('static', filename='images/menu/' ~ item.image_filename) }}"
            width="800" height="600" loading="lazy"
-           alt="{{ item.name }}, {{ item.price|money }}. {% if item.description %}{{ item.description }} {% endif %}{{ item.calories }} kcal: {{ item.protein_g }} g protein, {{ item.carbs_g }} g carbs, {{ item.fat_g }} g fat.">
+           alt="">
       <form class="menu-item__form" method="post" action="{{ url_for('add_to_cart') }}" data-add-to-cart>
         <input type="hidden" name="item_id" value="{{ item.item_id }}">
         <button class="button button--block" type="submit" aria-label="Add {{ item.name }} to cart">Add to cart</button>

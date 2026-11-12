@@ -149,8 +149,8 @@ def validate(values: dict[str, str]) -> dict[str, str]:
         card_number = values["card_number"]
         if not CARD_DIGITS_PATTERN.fullmatch(card_number):
             errors["card_number"] = "Enter the 13 to 19 digits on the card."
-        elif not _luhn_ok(card_number):
-            errors["card_number"] = "That card number doesn't look right. Check it and try again."
+        # elif not _luhn_ok(card_number):
+        #     errors["card_number"] = "That card number doesn't look right. Check it and try again."
 
     if "card_expiry" not in errors:
         if not CARD_EXPIRY_PATTERN.fullmatch(values["card_expiry"]):

@@ -124,23 +124,28 @@ def restaurant(slug: str):
 
 
 # --- 3. Add to cart ----------------------------------------------------------
-
 @app.route("/add-to-cart", methods=["POST"])
 def add_to_cart():
-    item_id = _form_value("item_id") or ""
+    item_id = (request.form.get("item_id") or "").strip()
     item = catalog.item(item_id)
     if item is None:
-        return _answer(error="That dish is no longer available.", status=400)
-    # Items can declare a default_quantity (portion-locked bowls ship as a pair).
-    # Normal items fall back to 1.
+        return jsonify({"error": "That dish is no longer available."}), 400
+
+    # Diet-portion items ship as a pair unless the client overrides quantity.
     default_qty = item.get("default_quantity", 1)
-    quantity = _parse_int(_form_value("quantity"), default=default_qty, minimum=1)
+    raw = request.form.get("quantity")
+    try:
+        quantity = max(1, int(raw)) if raw else default_qty
+    except (TypeError, ValueError):
+        quantity = default_qty
+
     cart.add_item(item_id, quantity)
-    return _answer(
-        data={"name": item["name"], "cart_count": cart.item_count()},
-        redirect_to=request.referrer or url_for("index"),
-        flash_message=f"Added {item['name']} to your cart.",
-    )
+
+    return jsonify({
+        "name": item["name"],
+        "cart_count": cart.item_count(),
+        "redirect_url": request.referrer or url_for("index"),
+    })
 
 
 @app.post("/cart/update")

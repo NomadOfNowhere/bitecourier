@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240">
+  <title>Minestrone Soup: tomato broth with carrot, zucchini, white beans, small pasta and basil</title>
+  <defs>
+    <g id="for04-carrot">
+      <rect x="-6" y="-6" width="12" height="12" rx="3" fill="#E07E22"/>
+      <rect x="-4.5" y="-4.5" width="9" height="7" rx="2" fill="#F5A04A"/>
+    </g>
+    <g id="for04-zucchini">
+      <path d="M-11 0 A11 11 0 0 1 11 0 Z" fill="#DCEBB0" stroke="#4F7F2C" stroke-width="2.5" stroke-linejoin="round"/>
+      <g fill="#BFD68A"><circle cx="-3.5" cy="-3.5" r="1.2"/><circle cx="3.5" cy="-3.5" r="1.2"/></g>
+    </g>
+    <g id="for04-bean">
+      <ellipse rx="8" ry="5" fill="#F6EEDC" stroke="#DDD0B4" stroke-width="1"/>
+      <ellipse cx="-2" cy="-1.5" rx="3" ry="1.4" fill="#FFFFFF"/>
+    </g>
+    <g id="for04-pasta" fill="none">
+      <circle r="4.5" stroke="#D9B35E" stroke-width="4.2"/>
+      <circle r="4.5" stroke="#F3DC9C" stroke-width="2.6"/>
+    </g>
+    <rect id="for04-celery" x="-6" y="-3" width="12" height="6" rx="2.5" fill="#9CC46A" stroke="#7BA64C" stroke-width="1"/>
+    <g id="for04-basil">
+      <path d="M0 -13 C9 -9 9 7 0 13 C-9 7 -9 -9 0 -13 Z" fill="#3F8A36"/>
+      <path d="M0 -10 V10" stroke="#2F6C2A" stroke-width="1.1" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <!-- Bowl -->
+  <circle cx="167" cy="128" r="104" fill="#1F2A55" opacity="0.08"/>
+  <circle cx="160" cy="120" r="104" fill="#FFFFFF" stroke="#D5DDF2" stroke-width="2"/>
+  <circle cx="160" cy="120" r="95" fill="none" stroke="#9FB0E0" stroke-width="1.5"/>
+
+  <!-- Broth -->
+  <circle cx="160" cy="120" r="86" fill="#D2552F"/>
+  <circle cx="160" cy="120" r="78" fill="#DE6A3F"/>
+  <g fill="#EE9A6C" opacity="0.7">
+    <circle cx="112" cy="92" r="5"/><circle cx="214" cy="150" r="4"/><circle cx="150" cy="180" r="3.5"/><circle cx="204" cy="78" r="3"/>
+  </g>
+
+  <!-- Vegetables, beans and pasta -->
+  <use href="#for04-zucchini" transform="translate(124 86) rotate(-30)"/>
+  <use href="#for04-zucchini" transform="translate(200 104) rotate(50)"/>
+  <use href="#for04-zucchini" transform="translate(146 160) rotate(160)"/>
+  <use href="#for04-zucchini" transform="translate(104 136) rotate(-100)"/>
+  <use href="#for04-carrot" transform="translate(152 84) rotate(15)"/>
+  <use href="#for04-carrot" transform="translate(186 68) rotate(-20)"/>
+  <use href="#for04-carrot" transform="translate(120 114) rotate(30)"/>
+  <use href="#for04-carrot" transform="translate(192 150) rotate(-10)"/>
+  <use href="#for04-carrot" transform="translate(166 180) rotate(25)"/>
+  <use href="#for04-carrot" transform="translate(222 124) rotate(40)"/>
+  <use href="#for04-bean" transform="translate(172 98) rotate(25)"/>
+  <use href="#for04-bean" transform="translate(140 134) rotate(-35)"/>
+  <use href="#for04-bean" transform="translate(212 136) rotate(70)"/>
+  <use href="#for04-bean" transform="translate(120 164) rotate(10)"/>
+  <use href="#for04-bean" transform="translate(98 106) rotate(-60)"/>
+  <use href="#for04-bean" transform="translate(180 166) rotate(-20)"/>
+  <use href="#for04-pasta" transform="translate(138 106)"/>
+  <use href="#for04-pasta" transform="translate(190 124)"/>
+  <use href="#for04-pasta" transform="translate(164 146)"/>
+  <use href="#for04-pasta" transform="translate(110 150)"/>
+  <use href="#for04-pasta" transform="translate(214 92)"/>
+  <use href="#for04-pasta" transform="translate(134 60)"/>
+  <use href="#for04-pasta" transform="translate(204 172)"/>
+  <use href="#for04-celery" transform="translate(162 62) rotate(30)"/>
+  <use href="#for04-celery" transform="translate(96 124) rotate(-50)"/>
+  <use href="#for04-celery" transform="translate(176 134) rotate(70)"/>
+  <use href="#for04-celery" transform="translate(132 184) rotate(-15)"/>
+  <use href="#for04-celery" transform="translate(226 148) rotate(20)"/>
+
+  <!-- Basil and parmesan -->
+  <use href="#for04-basil" transform="translate(156 116) rotate(-40)"/>
+  <use href="#for04-basil" transform="translate(170 118) rotate(55)"/>
+  <g fill="#FBF3D6">
+    <rect x="146" y="96" width="5" height="2" rx="1" transform="rotate(30 148 97)"/><rect x="182" y="110" width="5" height="2" rx="1" transform="rotate(-40 184 111)"/>
+    <rect x="150" y="142" width="5" height="2" rx="1" transform="rotate(70 152 143)"/><rect x="128" y="124" width="5" height="2" rx="1" transform="rotate(-10 130 125)"/>
+    <rect x="196" y="138" width="5" height="2" rx="1" transform="rotate(20 198 139)"/><rect x="170" y="84" width="5" height="2" rx="1" transform="rotate(-60 172 85)"/>
+  </g>
+</svg>

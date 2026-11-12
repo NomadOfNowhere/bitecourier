@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240">
+  <title>Caprese Salad: a ring of tomato and mozzarella slices with basil and balsamic</title>
+  <defs>
+    <g id="for03-tomato">
+      <circle r="22" fill="#C9382B"/>
+      <circle r="19" fill="#E5533F"/>
+      <g fill="#F08A6E">
+        <ellipse cx="-8" cy="-7" rx="6" ry="4.5" transform="rotate(-40 -8 -7)"/><ellipse cx="8" cy="-7" rx="6" ry="4.5" transform="rotate(40 8 -7)"/>
+        <ellipse cx="-8" cy="7" rx="6" ry="4.5" transform="rotate(40 -8 7)"/><ellipse cx="8" cy="7" rx="6" ry="4.5" transform="rotate(-40 8 7)"/>
+      </g>
+      <g fill="#F7D9A0">
+        <circle cx="-9" cy="-7" r="1.2"/><circle cx="-6" cy="-9" r="1.2"/><circle cx="8" cy="-8" r="1.2"/><circle cx="10" cy="-5" r="1.2"/>
+        <circle cx="-8" cy="8" r="1.2"/><circle cx="-10" cy="5" r="1.2"/><circle cx="7" cy="9" r="1.2"/><circle cx="9" cy="6" r="1.2"/>
+      </g>
+    </g>
+    <g id="for03-mozz">
+      <circle r="21" fill="#FBF7EC" stroke="#E4DCC8" stroke-width="1.5"/>
+      <path d="M-11 -8 Q0 -15 11 -8" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <g id="for03-basil">
+      <path d="M0 -17 C12 -12 12 9 0 17 C-12 9 -12 -12 0 -17 Z" fill="#3F8A36"/>
+      <path d="M0 -13 V13 M0 -4 L5 -9 M0 -4 L-5 -9 M0 5 L5 0 M0 5 L-5 0" fill="none" stroke="#2F6C2A" stroke-width="1.1" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <!-- Plate -->
+  <circle cx="167" cy="128" r="106" fill="#1F2A55" opacity="0.08"/>
+  <circle cx="160" cy="120" r="106" fill="#FFFFFF" stroke="#D5DDF2" stroke-width="2"/>
+  <circle cx="160" cy="120" r="92" fill="none" stroke="#E9EDF8" stroke-width="2"/>
+
+  <!-- Olive oil -->
+  <g fill="#E2CC55" opacity="0.6">
+    <circle cx="160" cy="120" r="30"/><circle cx="104" cy="186" r="4"/><circle cx="232" cy="72" r="3.5"/><circle cx="84" cy="78" r="3"/>
+  </g>
+
+  <!-- Ring of slices, each overlapping the one before -->
+  <use href="#for03-tomato" transform="translate(218 120)"/>
+  <use href="#for03-mozz" transform="translate(210.2 149)"/>
+  <use href="#for03-tomato" transform="translate(189 170.2) rotate(40)"/>
+  <use href="#for03-mozz" transform="translate(160 178)"/>
+  <use href="#for03-tomato" transform="translate(131 170.2) rotate(80)"/>
+  <use href="#for03-mozz" transform="translate(109.8 149)"/>
+  <use href="#for03-tomato" transform="translate(102 120) rotate(20)"/>
+  <use href="#for03-mozz" transform="translate(109.8 91)"/>
+  <use href="#for03-tomato" transform="translate(131 69.8) rotate(60)"/>
+  <use href="#for03-mozz" transform="translate(160 62)"/>
+  <use href="#for03-tomato" transform="translate(189 69.8) rotate(10)"/>
+  <use href="#for03-mozz" transform="translate(210.2 91)"/>
+
+  <!-- Balsamic -->
+  <path d="M96 96 C128 70 150 150 184 110 S226 100 232 138" fill="none" stroke="#3B1F1A" stroke-width="2.4" stroke-linecap="round" opacity="0.85"/>
+  <path d="M110 160 C134 138 160 176 190 150" fill="none" stroke="#3B1F1A" stroke-width="2.4" stroke-linecap="round" opacity="0.85"/>
+
+  <!-- Basil -->
+  <use href="#for03-basil" transform="translate(150 114) rotate(-50)"/>
+  <use href="#for03-basil" transform="translate(172 112) rotate(40)"/>
+  <use href="#for03-basil" transform="translate(160 134) rotate(175)"/>
+  <use href="#for03-basil" transform="translate(120 76) rotate(-30) scale(0.7)"/>
+  <use href="#for03-basil" transform="translate(206 168) rotate(140) scale(0.7)"/>
+</svg>

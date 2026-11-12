@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% from "_macros.html" import restaurant_style %}
+{% from "_icons.html" import empty_table, star %}
+
+{% block title %}BiteCourier | Food delivery in {{ delivery_area.name }}{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1 class="hero__title">
+    <span class="hero__line">Sushi today.</span>
+    <span class="hero__line">Tacos tomorrow.</span>
+    <span class="hero__line">Pizza whenever.</span>
+  </h1>
+  <p class="hero__lede">Quality food from exclusive {{ delivery_area.name }} kitchens, with new ones joining all the time. Whatever you're in the mood for, it's on its way.</p>
+</section>
+
+<section class="restaurant-grid" aria-label="Restaurants">
+  {% for r in restaurants %}
+    {% set kcal = calorie_ranges[r.restaurant_id] %}
+    <a class="restaurant-panel" href="{{ url_for('restaurant', slug=r.slug) }}" style="{{ restaurant_style(r) }}">
+      <img class="restaurant-panel__cover"
+           src="{{ url_for('static', filename='images/restaurants/' ~ r.cover_image) }}"
+           width="1200" height="600" alt="">
+      <div class="restaurant-panel__body">
+        <h2 class="restaurant-panel__name">{{ r.name }}</h2>
+        <p class="restaurant-panel__desc">{{ r.description }}</p>
+        <p class="restaurant-panel__meta">
+          Delivery in {{ r.eta_min }}–{{ r.eta_max }} min{% if kcal %}<br>Dishes from {{ kcal[0] }} to {{ kcal[1] }} kcal{% endif %}
+        </p>
+        <span class="restaurant-panel__cta">View menu</span>
+      </div>
+    </a>
+  {% endfor %}
+
+  {# Not a restaurant: tells visitors the list is growing. Delete it when you no longer need it. #}
+  <div class="restaurant-panel restaurant-panel--soon">
+    {{ empty_table() }}
+    <div class="restaurant-panel__body">
+      <h2 class="restaurant-panel__name">Coming soon</h2>
+      <p class="restaurant-panel__desc">More {{ delivery_area.name }} kitchens are joining BiteCourier. Their menus will appear here as soon as they're ready to cook for you.</p>
+    </div>
+  </div>
+</section>
+
+{% if reviews %}
+<section class="reviews" aria-label="Customer reviews">
+  <div class="wrap">
+    <h2 class="reviews__title">What San Francisco is saying</h2>
+    <ul class="reviews__grid">
+      {% for review in reviews %}
+        <li class="review-card">
+          <div class="review-card__stars" role="img" aria-label="Rated {{ review.rating }} out of 5">
+            {% for n in range(5) %}{{ star(n < review.rating) }}{% endfor %}
+          </div>
+          <blockquote class="review-card__quote">&ldquo;{{ review.quote }}&rdquo;</blockquote>
+          <p class="review-card__meta">
+            <span class="review-card__name">{{ review.name }}</span> &middot; {{ review.neighborhood }}
+          </p>
+          <p class="review-card__dish">Ordered the {{ review.dish }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,50 @@
+[
+  {
+    "restaurant_id": "sakura",
+    "slug": "sakura-sushi-lite",
+    "name": "Sakura Sushi Lite",
+    "description": "Lighter rolls, sashimi and edamame.",
+    "cover_color": "#FDE8EA",
+    "accent_color": "#9C3D4B",
+    "cover_image": "sakura.png",
+    "eta_min": 30,
+    "eta_max": 40,
+    "featured": true
+  },
+  {
+    "restaurant_id": "greenbowl",
+    "slug": "green-bowl-co",
+    "name": "Green Bowl Co",
+    "description": "Grain bowls, salads and Mediterranean plates.",
+    "cover_color": "#E8F5E9",
+    "accent_color": "#2E6B3F",
+    "cover_image": "greenbowl.png",
+    "eta_min": 25,
+    "eta_max": 35,
+    "featured": true
+  },
+  {
+    "restaurant_id": "taqueria",
+    "slug": "taqueria-ligera",
+    "name": "Taquería Ligera",
+    "description": "Grilled tacos, burrito bowls and street corn.",
+    "cover_color": "#FFF3D1",
+    "accent_color": "#8A5200",
+    "cover_image": "taqueria.png",
+    "eta_min": 20,
+    "eta_max": 30,
+    "featured": true
+  },
+  {
+    "restaurant_id": "forno",
+    "slug": "forno-leggero",
+    "name": "Forno Leggero",
+    "description": "Thin-crust pizza, flatbreads, salads and soup.",
+    "cover_color": "#E8EEFB",
+    "accent_color": "#33488A",
+    "cover_image": "forno.png",
+    "eta_min": 30,
+    "eta_max": 45,
+    "featured": true
+  }
+]

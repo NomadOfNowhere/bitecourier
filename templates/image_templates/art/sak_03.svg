@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240">
+  <title>Edamame Bowl: salted edamame pods in a ceramic bowl</title>
+  <defs>
+    <!-- One pod: outline layer, body with three bean bumps, seam, highlights -->
+    <g id="sak03-pod">
+      <path d="M-35 2 L-29 0" stroke="#5E8F34" stroke-width="3" stroke-linecap="round"/>
+      <g fill="#5E8F34">
+        <rect x="-30.5" y="-10.5" width="61" height="21" rx="10.5"/>
+        <circle cx="-16" cy="-2" r="12"/><circle cx="1" cy="-3" r="12.5"/><circle cx="17" cy="-2" r="12"/>
+      </g>
+      <g fill="#7FB347">
+        <rect x="-29" y="-9" width="58" height="18" rx="9"/>
+        <circle cx="-16" cy="-2" r="10.5"/><circle cx="1" cy="-3" r="11"/><circle cx="17" cy="-2" r="10.5"/>
+      </g>
+      <path d="M-26 6 Q0 11 26 6" fill="none" stroke="#5E8F34" stroke-width="1.4" stroke-linecap="round"/>
+      <g fill="#A9D46E">
+        <ellipse cx="-17" cy="-6" rx="5.5" ry="3.2"/><ellipse cx="0" cy="-7" rx="6" ry="3.4"/><ellipse cx="16" cy="-6" rx="5.5" ry="3.2"/>
+      </g>
+    </g>
+  </defs>
+
+  <!-- Bowl -->
+  <circle cx="167" cy="128" r="104" fill="#5A2A30" opacity="0.08"/>
+  <circle cx="160" cy="120" r="104" fill="#FFFFFF" stroke="#F1D9DC" stroke-width="2"/>
+  <circle cx="160" cy="120" r="96" fill="none" stroke="#EDB6BE" stroke-width="1.5"/>
+  <circle cx="160" cy="120" r="88" fill="#F6F1EC"/>
+
+  <!-- Pods, back to front -->
+  <use href="#sak03-pod" transform="translate(124 80) rotate(25)"/>
+  <use href="#sak03-pod" transform="translate(180 74) rotate(-15)"/>
+  <use href="#sak03-pod" transform="translate(212 104) rotate(70)"/>
+  <use href="#sak03-pod" transform="translate(104 124) rotate(-65)"/>
+  <use href="#sak03-pod" transform="translate(160 160) rotate(170)"/>
+  <use href="#sak03-pod" transform="translate(206 146) rotate(35)"/>
+  <use href="#sak03-pod" transform="translate(126 156) rotate(-25)"/>
+  <use href="#sak03-pod" transform="translate(150 112) rotate(5)"/>
+  <use href="#sak03-pod" transform="translate(186 118) rotate(105)"/>
+  <use href="#sak03-pod" transform="translate(132 100) rotate(150)"/>
+
+  <!-- Sea salt -->
+  <g fill="#FFFFFF">
+    <rect x="140" y="96" width="3" height="3" transform="rotate(20 141 97)"/>
+    <rect x="170" y="108" width="3.5" height="3" transform="rotate(40 171 109)"/>
+    <rect x="118" y="150" width="3" height="3" transform="rotate(10 119 151)"/>
+    <rect x="196" y="140" width="3" height="3.5" transform="rotate(-20 197 141)"/>
+    <rect x="160" y="150" width="3" height="3" transform="rotate(35 161 151)"/>
+    <rect x="186" y="78" width="3" height="3" transform="rotate(15 187 79)"/>
+    <rect x="126" y="78" width="3.5" height="3" transform="rotate(-30 127 79)"/>
+    <rect x="210" y="112" width="3" height="3" transform="rotate(45 211 113)"/>
+    <rect x="100" y="118" width="3" height="3" transform="rotate(25 101 119)"/>
+    <rect x="150" y="128" width="3" height="3" transform="rotate(-10 151 129)"/>
+  </g>
+</svg>

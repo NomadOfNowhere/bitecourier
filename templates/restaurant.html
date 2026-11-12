@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "_macros.html" import restaurant_style %}
+{% from "_icons.html" import star %}
+
+{% block title %}{{ restaurant.name }} | BiteCourier{% endblock %}
+
+{% block content %}
+<section class="banner" style="{{ restaurant_style(restaurant) }}">
+  <div class="banner__text">
+    <a class="banner__back" href="{{ url_for('index') }}">All restaurants</a>
+    <h1 class="banner__name">{{ restaurant.name }}</h1>
+    <p class="banner__desc">{{ restaurant.description }} Delivery in {{ restaurant.eta_min }}–{{ restaurant.eta_max }} min.</p>
+    {% if rating %}
+      <p class="banner__rating">
+        {{ star() }}
+        <strong>{{ rating[0] }}</strong>
+        <span class="banner__rating-count">({{ rating[1] }} review{{ 's' if rating[1] != 1 }})</span>
+      </p>
+    {% endif %}
+  </div>
+  <img class="banner__cover"
+       src="{{ url_for('static', filename='images/restaurants/' ~ restaurant.cover_image) }}"
+       width="1200" height="600" alt="">
+</section>
+
+<ul class="menu-grid" style="{{ restaurant_style(restaurant) }}">
+  {% for item in items %}
+    <li class="menu-item">
+      <img class="menu-item__image"
+           src="{{ url_for('static', filename='images/menu/' ~ item.image_filename) }}"
+           width="800" height="600" loading="lazy"
+           alt="{{ item.name }}, {{ item.price|money }}. {% if item.description %}{{ item.description }} {% endif %}{{ item.calories }} kcal: {{ item.protein_g }} g protein, {{ item.carbs_g }} g carbs, {{ item.fat_g }} g fat.">
+      <form class="menu-item__form" method="post" action="{{ url_for('add_to_cart') }}" data-add-to-cart>
+        <input type="hidden" name="item_id" value="{{ item.item_id }}">
+        <button class="button button--block" type="submit" aria-label="Add {{ item.name }} to cart">Add to cart</button>
+      </form>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,86 @@
+<!doctype html>
+{#
+  Restaurant cover rendered to a 1200x600 PNG by generate_images.py
+  (static/images/restaurants/<restaurant_id>.png).
+
+  Variables:
+    restaurant_id, name, cover_color, accent_color
+    dishes   up to four menu items, each with .item_id, .name and .art (same artwork
+             as the product cards). The first one is the large dish in the middle.
+    photo    an <img> if art/<restaurant_id>.jpg|.png|.webp exists; it then fills the
+             whole cover and the dishes are not drawn.
+
+  Iterating: move the dishes with the --w / --x / --y / --r values below, then
+    python generate_images.py --only sakura
+#}
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --cover-width: 1200px;
+    --cover-height: 600px;
+    --cover-bg: {{ cover_color }};
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: var(--cover-width);
+    height: var(--cover-height);
+    overflow: hidden;
+  }
+
+  .cover {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--cover-bg);
+  }
+
+  .cover__photo > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* A table seen from above: one dish in full, the others sliding off the edges */
+  .dish {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--w);
+    aspect-ratio: 4 / 3;
+    transform: rotate(var(--r));
+  }
+
+  .dish > svg,
+  .dish > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .dish > img { object-fit: cover; border-radius: 24px; }
+
+  .dish--1 { --w: 660px; --x: 270px; --y: 52px;   --r: 0deg; }
+  .dish--2 { --w: 500px; --x: -190px; --y: 150px; --r: -8deg; }
+  .dish--3 { --w: 480px; --x: 850px; --y: -120px; --r: 7deg; }
+  .dish--4 { --w: 480px; --x: 870px; --y: 300px;  --r: -5deg; }
+</style>
+</head>
+<body>
+  <div class="cover">
+    {% if photo %}
+      <div class="cover__photo">{{ photo }}</div>
+    {% else %}
+      {# Drawn back to front, so the first dish ends up on top #}
+      {% for dish in dishes|reverse %}
+        {% if dish.art %}<div class="dish dish--{{ loop.revindex }}">{{ dish.art }}</div>{% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</body>
+</html>

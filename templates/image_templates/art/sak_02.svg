@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240">
+  <title>Dragon Roll Lite: avocado-topped roll with sauce, roe and a shrimp tail</title>
+  <defs>
+    <!-- One piece seen from above: avocado slice laid over the roll -->
+    <g id="sak02-piece">
+      <rect x="-22" y="-34" width="44" height="68" rx="16" fill="#6E9A3C"/>
+      <rect x="-20" y="-32" width="40" height="64" rx="14" fill="#B9D27A"/>
+      <rect x="-13" y="-26" width="26" height="52" rx="11" fill="#D7E7A4"/>
+      <path d="M-7 -20 Q-3 0 -7 20" fill="none" stroke="#EDF5CF" stroke-width="3" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <!-- Plate -->
+  <rect x="28" y="58" width="276" height="140" rx="22" fill="#5A2A30" opacity="0.08"/>
+  <rect x="22" y="50" width="276" height="140" rx="22" fill="#FFFFFF"/>
+  <rect x="30" y="58" width="260" height="124" rx="16" fill="none" stroke="#F1DDE0" stroke-width="1.5"/>
+
+  <!-- Avocado-topped pieces -->
+  <use href="#sak02-piece" transform="translate(62 120) rotate(-12)"/>
+  <use href="#sak02-piece" transform="translate(102 120) rotate(-12)"/>
+  <use href="#sak02-piece" transform="translate(142 120) rotate(-12)"/>
+  <use href="#sak02-piece" transform="translate(182 120) rotate(-12)"/>
+  <use href="#sak02-piece" transform="translate(222 120) rotate(-12)"/>
+
+  <!-- Shrimp tail -->
+  <g transform="translate(258 118) rotate(-10)">
+    <path d="M-8 -7 L20 -24 Q30 -12 25 0 Q30 12 20 24 L-8 7 Z" fill="#EE6A3D"/>
+    <path d="M-2 -4 L20 -16 M-2 0 L25 0 M-2 4 L20 16" fill="none" stroke="#C9472A" stroke-width="1.6" stroke-linecap="round"/>
+    <rect x="-12" y="-8" width="8" height="16" rx="3" fill="#F6B08F"/>
+  </g>
+
+  <!-- Sauce drizzle -->
+  <path d="M44 128 C64 100 84 150 104 120 S144 98 164 122 S204 150 230 116" fill="none" stroke="#5B3220" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+
+  <!-- Roe -->
+  <g fill="#F38B3B">
+    <circle cx="56" cy="102" r="2.4"/><circle cx="63" cy="106" r="2.4"/><circle cx="58" cy="110" r="2.4"/>
+    <circle cx="98" cy="100" r="2.4"/><circle cx="105" cy="104" r="2.4"/><circle cx="100" cy="108" r="2.4"/>
+    <circle cx="140" cy="136" r="2.4"/><circle cx="146" cy="140" r="2.4"/><circle cx="139" cy="143" r="2.4"/>
+    <circle cx="180" cy="100" r="2.4"/><circle cx="187" cy="104" r="2.4"/><circle cx="182" cy="108" r="2.4"/>
+    <circle cx="220" cy="136" r="2.4"/><circle cx="226" cy="140" r="2.4"/><circle cx="219" cy="143" r="2.4"/>
+  </g>
+</svg>

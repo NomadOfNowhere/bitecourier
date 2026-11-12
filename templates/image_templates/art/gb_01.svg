@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240">
+  <title>Harvest Bowl: wild rice, kale, roasted sweet potato, apple, red onion, feta and pumpkin seeds</title>
+  <defs>
+    <pattern id="gb01-grain" width="14" height="14" patternUnits="userSpaceOnUse">
+      <ellipse cx="3" cy="4" rx="2.6" ry="1.2" fill="#C9B184" transform="rotate(30 3 4)"/>
+      <ellipse cx="10" cy="10" rx="3" ry="1.1" fill="#5E4636" transform="rotate(-40 10 10)"/>
+      <ellipse cx="10" cy="3" rx="2.2" ry="1.1" fill="#EADCBC" transform="rotate(70 10 3)"/>
+      <ellipse cx="4" cy="11" rx="2.4" ry="1.1" fill="#D4BE93" transform="rotate(-10 4 11)"/>
+    </pattern>
+    <g id="gb01-kale">
+      <path d="M0 -20 C14 -18 22 -6 18 6 C14 18 -6 22 -16 12 C-24 2 -16 -18 0 -20 Z"/>
+      <path d="M-12 10 Q0 0 12 -12" fill="none" stroke="#86BE62" stroke-width="2" stroke-linecap="round"/>
+    </g>
+    <g id="gb01-cube">
+      <rect x="-10" y="-10" width="20" height="20" rx="5" fill="#D06A27"/>
+      <rect x="-9" y="-9" width="18" height="15" rx="4" fill="#EC8A3D"/>
+      <circle cx="-4" cy="-4" r="2.5" fill="#F7AE6A"/>
+      <circle cx="5" cy="4" r="1.6" fill="#A9531E"/>
+    </g>
+    <g id="gb01-apple">
+      <path d="M-22 0 A22 22 0 0 0 22 0 A26 13 0 0 1 -22 0 Z" fill="#F6EDCF"/>
+      <path d="M-22 0 A22 22 0 0 0 22 0" fill="none" stroke="#C8402F" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+    <g id="gb01-onion">
+      <path d="M-18 0 A18 18 0 0 1 18 0" fill="none" stroke="#97468A" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M-18 0 A18 18 0 0 1 18 0" fill="none" stroke="#E6C6DF" stroke-width="1.4" stroke-linecap="round"/>
+    </g>
+    <ellipse id="gb01-seed" rx="4.5" ry="2.4" fill="#9AAE5C" stroke="#7C8F44" stroke-width="0.8"/>
+  </defs>
+
+  <!-- Bowl and grain base -->
+  <circle cx="167" cy="128" r="104" fill="#1E3A24" opacity="0.08"/>
+  <circle cx="160" cy="120" r="104" fill="#FFFFFF" stroke="#D4E5D6" stroke-width="2"/>
+  <circle cx="160" cy="120" r="90" fill="#DFCDA6"/>
+  <circle cx="160" cy="120" r="90" fill="url(#gb01-grain)"/>
+
+  <!-- Kale, top left -->
+  <use href="#gb01-kale" fill="#3E7631" transform="translate(100 86) rotate(0)"/>
+  <use href="#gb01-kale" fill="#4F8A3C" transform="translate(124 70) rotate(40)"/>
+  <use href="#gb01-kale" fill="#64A04A" transform="translate(140 94) rotate(-30)"/>
+  <use href="#gb01-kale" fill="#4F8A3C" transform="translate(104 110) rotate(80)"/>
+
+  <!-- Roasted sweet potato, top right -->
+  <use href="#gb01-cube" transform="translate(184 70) rotate(10)"/>
+  <use href="#gb01-cube" transform="translate(207 68) rotate(-15)"/>
+  <use href="#gb01-cube" transform="translate(226 88) rotate(25)"/>
+  <use href="#gb01-cube" transform="translate(200 92) rotate(-5)"/>
+  <use href="#gb01-cube" transform="translate(182 98) rotate(15)"/>
+  <use href="#gb01-cube" transform="translate(212 112) rotate(-20)"/>
+
+  <!-- Red onion, bottom left -->
+  <use href="#gb01-onion" transform="translate(116 156) rotate(-20)"/>
+  <use href="#gb01-onion" transform="translate(128 170) rotate(30)"/>
+  <use href="#gb01-onion" transform="translate(106 172) rotate(160)"/>
+
+  <!-- Apple, bottom right -->
+  <use href="#gb01-apple" transform="translate(188 150) rotate(-25)"/>
+  <use href="#gb01-apple" transform="translate(204 160) rotate(0)"/>
+  <use href="#gb01-apple" transform="translate(178 170) rotate(20)"/>
+
+  <!-- Feta and pumpkin seeds, center -->
+  <g fill="#FBF9F2" stroke="#E2DACA" stroke-width="1">
+    <path d="M152 114 l7 -3 5 4 -2 7 -7 1 -4 -4 z"/>
+    <path d="M166 126 l6 -2 4 5 -3 5 -6 0 -2 -4 z"/>
+    <path d="M146 132 l6 -1 3 5 -3 4 -6 -1 -1 -4 z"/>
+    <path d="M168 142 l5 -3 5 3 -1 6 -6 1 -3 -3 z"/>
+  </g>
+  <use href="#gb01-seed" transform="translate(160 136) rotate(20)"/>
+  <use href="#gb01-seed" transform="translate(176 118) rotate(-40)"/>
+  <use href="#gb01-seed" transform="translate(144 120) rotate(70)"/>
+  <use href="#gb01-seed" transform="translate(156 150) rotate(-10)"/>
+  <use href="#gb01-seed" transform="translate(136 142) rotate(35)"/>
+  <use href="#gb01-seed" transform="translate(172 104) rotate(85)"/>
+
+  <!-- Tahini drizzle -->
+  <path d="M112 128 C126 116 136 140 150 126 S172 112 184 128 S204 140 214 128" fill="none" stroke="#F4E8CB" stroke-width="2.6" stroke-linecap="round" opacity="0.9"/>
+</svg>

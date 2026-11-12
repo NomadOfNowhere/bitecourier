@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <mask id="bite">
+    <rect width="32" height="32" fill="#fff"/>
+    <circle cx="25" cy="6" r="5.2" fill="#000"/>
+    <circle cx="28.6" cy="12.4" r="3.6" fill="#000"/>
+    <circle cx="19.2" cy="2.6" r="3.3" fill="#000"/>
+  </mask>
+  <path mask="url(#bite)" fill="#1C2B36" d="M16 2.5c-6.4 0-11.5 5-11.5 11.2 0 7.9 11.5 15.8 11.5 15.8s11.5-7.9 11.5-15.8C27.5 7.5 22.4 2.5 16 2.5z"/>
+  <circle cx="15" cy="14.2" r="4.6" fill="#FFD25E"/>
+</svg>

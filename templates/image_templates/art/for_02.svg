@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240">
+  <title>Garden Veggie Flatbread: ricotta flatbread with zucchini, cherry tomatoes, red onion and arugula</title>
+  <defs>
+    <g id="for02-zucchini">
+      <circle r="10" fill="#5E8F34"/>
+      <circle r="8" fill="#DCEBB0"/>
+      <g fill="#C3D98E"><circle cx="-2.5" cy="-2" r="1.3"/><circle cx="2.5" cy="-1" r="1.3"/><circle cx="0" cy="3" r="1.3"/></g>
+    </g>
+    <g id="for02-tomato">
+      <circle r="8" fill="#CF3A2A"/>
+      <circle r="6" fill="#E8604A"/>
+      <g fill="#F7D29E"><ellipse cx="-2.4" cy="-1" rx="1.2" ry="0.8"/><ellipse cx="2.4" cy="-1" rx="1.2" ry="0.8"/><ellipse cx="0" cy="2.6" rx="1.2" ry="0.8"/></g>
+    </g>
+    <g id="for02-onion" fill="none">
+      <circle r="8.5" stroke="#97468A" stroke-width="3"/>
+      <circle r="8.5" stroke="#E6C6DF" stroke-width="1"/>
+    </g>
+    <g id="for02-arugula">
+      <path d="M0 -13 C4 -10 2 -6 6 -3 C3 0 6 4 3 7 C4 11 0 13 0 13 C0 13 -4 11 -3 7 C-6 4 -3 0 -6 -3 C-2 -6 -4 -10 0 -13 Z" fill="#3F8A36"/>
+      <path d="M0 -10 V11" stroke="#2F6C2A" stroke-width="1" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <!-- Wooden board -->
+  <rect x="30" y="60" width="272" height="136" rx="12" fill="#1F2A55" opacity="0.10"/>
+  <rect x="24" y="52" width="272" height="136" rx="12" fill="#DDBB8C"/>
+  <g fill="none" stroke="#C9A26E" stroke-width="1.2" opacity="0.7">
+    <path d="M32 66 C90 60 150 72 210 64 S280 68 288 66"/>
+    <path d="M32 176 C90 182 150 172 210 180 S280 174 288 178"/>
+  </g>
+
+  <!-- Flatbread -->
+  <rect x="40" y="66" width="240" height="108" rx="34" fill="#E8C283" stroke="#C99A56" stroke-width="2"/>
+  <g fill="#C99A56">
+    <circle cx="60" cy="88" r="2.5"/><circle cx="262" cy="150" r="2.5"/><circle cx="254" cy="84" r="2"/><circle cx="64" cy="154" r="2"/>
+  </g>
+  <rect x="52" y="77" width="216" height="86" rx="26" fill="#F8F3E4"/>
+  <!-- Pesto swirls -->
+  <g fill="none" stroke="#A9C465" stroke-width="5" stroke-linecap="round" opacity="0.8">
+    <path d="M70 104 C90 88 110 124 132 104 S172 90 192 108 S232 124 250 104"/>
+    <path d="M72 140 C96 126 116 154 140 138 S184 128 204 144 S236 150 248 138"/>
+  </g>
+
+  <!-- Toppings -->
+  <use href="#for02-zucchini" transform="translate(82 100)"/>
+  <use href="#for02-zucchini" transform="translate(132 138)"/>
+  <use href="#for02-zucchini" transform="translate(176 98)"/>
+  <use href="#for02-zucchini" transform="translate(228 136)"/>
+  <use href="#for02-onion" transform="translate(110 112)"/>
+  <use href="#for02-onion" transform="translate(206 104)"/>
+  <use href="#for02-onion" transform="translate(166 144)"/>
+  <use href="#for02-onion" transform="translate(78 140)"/>
+  <use href="#for02-tomato" transform="translate(100 144)"/>
+  <use href="#for02-tomato" transform="translate(146 104)"/>
+  <use href="#for02-tomato" transform="translate(196 138)"/>
+  <use href="#for02-tomato" transform="translate(242 108)"/>
+  <use href="#for02-tomato" transform="translate(124 90)"/>
+  <use href="#for02-arugula" transform="translate(158 122) rotate(60)"/>
+  <use href="#for02-arugula" transform="translate(222 118) rotate(-40)"/>
+  <use href="#for02-arugula" transform="translate(94 122) rotate(110)"/>
+  <use href="#for02-arugula" transform="translate(186 150) rotate(20)"/>
+  <use href="#for02-arugula" transform="translate(60 118) rotate(-20)"/>
+
+  <!-- Cuts -->
+  <g stroke="#B98A48" stroke-width="1.4" opacity="0.6">
+    <path d="M100 66 V174"/><path d="M160 66 V174"/><path d="M220 66 V174"/>
+  </g>
+</svg>

@@ -1,0 +1,262 @@
+<!doctype html>
+{#
+  Product card rendered to an 800x600 PNG by generate_images.py.
+
+  Variables (one item from items.json, plus its restaurant's colors):
+    item_id, restaurant_id, name, price, calories, protein_g, carbs_g, fat_g, image_filename
+    description   one sentence about the dish (optional; up to two lines are shown)
+    ingredients   list of strings (optional; shown on one line)
+    cover_color, accent_color, restaurant_name
+    art   inline SVG from art/<item_id>.svg, or an <img> if art/<item_id>.jpg|.png|.webp
+          exists (a photo wins over the illustration). None if neither exists, and then
+          the cover shows only the name, in a larger size.
+
+  Iterating on the design:
+    1. Change the tokens in :root below.
+    2. python generate_images.py --only sak_01
+    3. Open static/images/menu/sak_01.png. Repeat, then run without --only for every card.
+  The script warns when a text is cut off or the panel overflows.
+#}
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    /* Canvas */
+    --card-width: 800px;
+    --card-height: 600px;
+    --cover-height: 350px;   /* the panel below gets the rest: 250px */
+    --panel-padding: 24px;
+    --art-width: 328px;      /* illustrations are drawn at 4:3 */
+    --art-height: 246px;
+    --art-gap: 8px;
+
+    /* Color */
+    --cover-bg: {{ cover_color }};
+    --cover-ink: {{ accent_color }};
+    --panel-bg: #FFFFFF;
+    --ink: #1C2B36;
+    --muted: #6B7780;
+    --divider: #E3E7EA;
+
+    /* Type */
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "DejaVu Serif", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Liberation Sans", sans-serif;
+    --cover-title-size: 36px;         /* under the artwork */
+    --cover-title-size-solo: 60px;    /* when there's no artwork */
+    --name-size: 24pt;
+    --price-size: 18pt;
+    --description-size: 13pt;
+    --description-lines: 2;
+    --ingredients-size: 11.5pt;
+    --label-size: 11pt;
+    --label-tracking: 0.14em;
+    --kcal-size: 28pt;
+    --macro-size: 13pt;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: var(--card-width);
+    height: var(--card-height);
+    overflow: hidden;
+  }
+
+  body {
+    background: var(--panel-bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .card {
+    display: grid;
+    grid-template-rows: var(--cover-height) minmax(0, 1fr);
+    height: 100%;
+  }
+
+  /* --- Top: the "cover" --------------------------------------------------- */
+
+  .cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--art-gap);
+    padding: 0 64px;
+    background: var(--cover-bg);
+  }
+
+  .cover__art {
+    flex: none;
+    width: var(--art-width);
+    height: var(--art-height);
+  }
+
+  .cover__art > svg,
+  .cover__art > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .cover__art > img {
+    object-fit: cover;
+    border-radius: 16px;
+  }
+
+  .cover__title {
+    font-family: var(--serif);
+    font-size: var(--cover-title-size);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    text-align: center;
+    text-wrap: balance;
+    color: var(--cover-ink);
+  }
+
+  .cover--text-only .cover__title { font-size: var(--cover-title-size-solo); }
+
+  /* --- Bottom: details ------------------------------------------------------ */
+
+  .panel {
+    display: flex;
+    flex-direction: column;
+    padding: var(--panel-padding);
+  }
+
+  .headline {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .name {
+    font-size: var(--name-size);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .price {
+    font-size: var(--price-size);
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Description and ingredients, under the nutrition */
+  .about {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--divider);
+  }
+
+  .description {
+    font-size: var(--description-size);
+    line-height: 1.3;
+    /* Longer text ends in an ellipsis instead of pushing the nutrition off the card */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--description-lines);
+    overflow: hidden;
+  }
+
+  .ingredients {
+    margin-top: 4px;
+    font-size: var(--ingredients-size);
+    line-height: 1.3;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .divider {
+    border: 0;
+    border-top: 1px solid var(--divider);
+    margin: 10px 0 8px;
+  }
+
+  /* Calories on the left, the three macros on the right, sharing one baseline */
+  .nutrition {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .label {
+    font-size: var(--label-size);
+    font-variant-caps: all-small-caps;
+    letter-spacing: var(--label-tracking);
+    line-height: 1.2;
+    color: var(--muted);
+  }
+
+  .kcal {
+    font-size: var(--kcal-size);
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kcal__unit {
+    margin-left: 4px;
+    font-size: 0.5em;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .macros {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    column-gap: 36px;
+    padding-bottom: 6px;
+    font-size: var(--macro-size);
+    line-height: 1.2;
+  }
+
+  .macro__label { color: var(--muted); margin-right: 6px; }
+  .macro__value { font-weight: 700; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+  <article class="card">
+    <section class="cover{% if not art %} cover--text-only{% endif %}">
+      {% if art %}<div class="cover__art">{{ art }}</div>{% endif %}
+      <h1 class="cover__title">{{ name }}</h1>
+    </section>
+
+    <section class="panel">
+      <div class="headline">
+        <h2 class="name">{{ name }}</h2>
+        <p class="price">{{ price|money }}</p>
+      </div>
+
+      <hr class="divider">
+
+      <div class="nutrition">
+        <div>
+          <p class="label">Nutrition</p>
+          <p class="kcal">{{ calories }}<span class="kcal__unit">kcal</span></p>
+        </div>
+        <div class="macros">
+          <p class="macro"><span class="macro__label">Protein</span><span class="macro__value">{{ protein_g }} g</span></p>
+          <p class="macro"><span class="macro__label">Carbs</span><span class="macro__value">{{ carbs_g }} g</span></p>
+          <p class="macro"><span class="macro__label">Fat</span><span class="macro__value">{{ fat_g }} g</span></p>
+        </div>
+      </div>
+
+      {% if description or ingredients %}
+        <div class="about">
+          {% if description %}<p class="description">{{ description }}</p>{% endif %}
+          {% if ingredients %}<p class="ingredients">{{ ingredients|join(", ")|capitalize }}</p>{% endif %}
+        </div>
+      {% endif %}
+    </section>
+  </article>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% from "_macros.html" import totals, line_list %}
+
+{% block title %}Order {{ order.order_id }} | BiteCourier{% endblock %}
+
+{% block content %}
+<section class="confirmation">
+  <h1 class="page-title">Order placed</h1>
+
+  <p class="confirmation__eta">Arriving {{ time_range(window.earliest, window.latest) }}</p>
+  <p class="confirmation__detail">
+    Estimated delivery in {{ window.min_minutes }}–{{ window.max_minutes }} minutes.
+    Order <strong>{{ order.order_id }}</strong>, placed at {{ order.placed_at|clock }} {{ delivery_area.name }} time.
+  </p>
+
+  <div class="ticket">
+    {{ line_list(order.lines) }}
+    {{ totals(order.subtotal, order.delivery_fee, order.total) }}
+    <div class="ticket__address">
+      <h2 class="ticket__heading">Delivering to</h2>
+      {% if order.customer_name %}<p class="ticket__name">{{ order.customer_name }}</p>{% endif %}
+      <p>{{ order.address }}</p>
+      {% if order.phone %}<p>{{ order.phone }}</p>{% endif %}
+      {% if order.delivery_notes %}<p class="ticket__notes">Note for the courier: {{ order.delivery_notes }}</p>{% endif %}
+    </div>
+    {% if order.card_last4 %}
+      <div class="ticket__address">
+        <h2 class="ticket__heading">Paid with</h2>
+        <p>Card ending in {{ order.card_last4 }}{% if order.card_expiry %} · exp {{ order.card_expiry }}{% endif %}</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <a class="button" href="{{ url_for('index') }}">Start a new order</a>
+</section>
+{% endblock %}

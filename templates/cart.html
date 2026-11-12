@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "_macros.html" import totals %}
+
+{% block title %}Your cart | BiteCourier{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Your cart</h1>
+
+{% if summary.is_empty %}
+  <div class="empty-state">
+    <p>Your cart is empty. Pick a kitchen to start an order.</p>
+    <a class="button" href="{{ url_for('index') }}">Browse restaurants</a>
+  </div>
+{% else %}
+  <div class="two-column">
+    <ul class="cart-lines">
+      {% for line in summary.lines %}
+        <li class="cart-line">
+          <img class="cart-line__thumb" src="{{ url_for('static', filename='images/menu/' ~ line.image_filename) }}" width="120" height="90" alt="">
+          <div class="cart-line__info">
+            <p class="cart-line__name">{{ line.name }}</p>
+            <p class="cart-line__meta">{{ line.restaurant_name }}, {{ line.unit_price|money }} each</p>
+          </div>
+
+          <form class="stepper" method="post" action="{{ url_for('update_cart') }}">
+            <input type="hidden" name="item_id" value="{{ line.item_id }}">
+            <button class="stepper__button" name="quantity" value="{{ line.quantity - 1 }}" aria-label="One fewer {{ line.name }}">&minus;</button>
+            <span class="stepper__value" aria-label="Quantity">{{ line.quantity }}</span>
+            <button class="stepper__button" name="quantity" value="{{ line.quantity + 1 }}" aria-label="One more {{ line.name }}">+</button>
+            <button class="stepper__remove" name="quantity" value="0">Remove</button>
+          </form>
+
+          <p class="cart-line__total">{{ line.line_total|money }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <aside class="summary" aria-label="Order total">
+      {{ totals(summary.subtotal, summary.delivery_fee, summary.total) }}
+      <a class="button button--block" href="{{ url_for('checkout') }}">Checkout</a>
+    </aside>
+  </div>
+{% endif %}
+{% endblock %}

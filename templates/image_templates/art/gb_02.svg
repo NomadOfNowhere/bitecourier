@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240">
+  <title>Mediterranean Plate: hummus, falafel, pita, tomato-cucumber salad and olives</title>
+  <defs>
+    <g id="gb02-pita">
+      <path d="M0 0 L50 -20 A54 54 0 0 1 50 20 Z" fill="#E7C48C" stroke="#D2A766" stroke-width="1.5" stroke-linejoin="round"/>
+      <g fill="#C89A58"><circle cx="30" cy="-4" r="2.5"/><circle cx="41" cy="7" r="2"/><circle cx="22" cy="5" r="1.8"/></g>
+    </g>
+    <g id="gb02-falafel">
+      <circle r="15" fill="#86542A"/>
+      <circle r="12.5" fill="#A26A38"/>
+      <circle cx="-4" cy="-4" r="5" fill="#BA8650"/>
+      <g fill="#6E4422"><circle cx="5" cy="-3" r="1.4"/><circle cx="-2" cy="6" r="1.4"/><circle cx="6" cy="5" r="1.2"/><circle cx="-7" cy="2" r="1.2"/></g>
+      <g fill="#7FA34E"><circle cx="1" cy="1" r="1.1"/><circle cx="-5" cy="7" r="1"/></g>
+    </g>
+    <g id="gb02-tomato">
+      <rect x="-6" y="-6" width="12" height="12" rx="3" fill="#D3402F"/>
+      <rect x="-3.5" y="-3.5" width="7" height="7" rx="2" fill="#F07A62"/>
+    </g>
+    <g id="gb02-cucumber">
+      <rect x="-6" y="-6" width="12" height="12" rx="3" fill="#7FA94B"/>
+      <rect x="-4.5" y="-4.5" width="9" height="9" rx="2.5" fill="#DDEDB9"/>
+    </g>
+    <g id="gb02-olive">
+      <ellipse rx="8.5" ry="6.5" fill="#4A2C3B"/>
+      <ellipse cx="-3" cy="-2" rx="2.6" ry="1.5" fill="#8A6A7A"/>
+    </g>
+  </defs>
+
+  <!-- Plate -->
+  <circle cx="167" cy="128" r="106" fill="#1E3A24" opacity="0.08"/>
+  <circle cx="160" cy="120" r="106" fill="#FFFFFF" stroke="#D4E5D6" stroke-width="2"/>
+  <circle cx="160" cy="120" r="86" fill="none" stroke="#EDF3EE" stroke-width="2"/>
+
+  <!-- Pita, tucked under the hummus -->
+  <use href="#gb02-pita" transform="translate(122 104) rotate(198)"/>
+  <use href="#gb02-pita" transform="translate(122 104) rotate(236)"/>
+
+  <!-- Hummus -->
+  <circle cx="138" cy="114" r="44" fill="#EBD5A5" stroke="#D8BC85" stroke-width="2"/>
+  <g fill="none" stroke="#D6B77F" stroke-width="3" stroke-linecap="round">
+    <path d="M108 114 A30 30 0 1 1 138 144"/>
+    <path d="M120 114 A18 18 0 1 1 138 132"/>
+  </g>
+  <ellipse cx="140" cy="112" rx="13" ry="9" fill="#E2BE43" opacity="0.55"/>
+  <g fill="#E0B873" stroke="#C99E55" stroke-width="0.8">
+    <circle cx="137" cy="110" r="4.5"/><circle cx="145" cy="115" r="4.5"/><circle cx="134" cy="118" r="4.5"/>
+  </g>
+  <g fill="#C4462F">
+    <circle cx="124" cy="100" r="1.7"/><circle cx="152" cy="124" r="1.7"/><circle cx="128" cy="128" r="1.7"/>
+    <circle cx="154" cy="102" r="1.7"/><circle cx="118" cy="118" r="1.7"/><circle cx="146" cy="134" r="1.7"/>
+  </g>
+  <g fill="#5E9A3E">
+    <circle cx="150" cy="96" r="1.5"/><circle cx="122" cy="110" r="1.5"/><circle cx="158" cy="116" r="1.5"/><circle cx="136" cy="134" r="1.5"/>
+  </g>
+
+  <!-- Falafel -->
+  <use href="#gb02-falafel" transform="translate(206 82)"/>
+  <use href="#gb02-falafel" transform="translate(230 106)"/>
+  <use href="#gb02-falafel" transform="translate(204 112)"/>
+
+  <!-- Tomato and cucumber salad -->
+  <use href="#gb02-tomato" transform="translate(118 162) rotate(10)"/>
+  <use href="#gb02-cucumber" transform="translate(132 172) rotate(-20)"/>
+  <use href="#gb02-tomato" transform="translate(146 168) rotate(-15)"/>
+  <use href="#gb02-cucumber" transform="translate(160 176) rotate(12)"/>
+  <use href="#gb02-tomato" transform="translate(126 186) rotate(5)"/>
+  <use href="#gb02-cucumber" transform="translate(146 186) rotate(30)"/>
+  <use href="#gb02-tomato" transform="translate(164 160) rotate(30)"/>
+  <use href="#gb02-cucumber" transform="translate(112 176) rotate(-8)"/>
+  <use href="#gb02-tomato" transform="translate(176 172) rotate(-10)"/>
+  <g fill="#F7F1F6">
+    <rect x="137" y="160" width="4" height="7" rx="2" transform="rotate(30 139 163)"/>
+    <rect x="156" y="190" width="4" height="7" rx="2" transform="rotate(-40 158 193)"/>
+    <rect x="122" y="196" width="4" height="7" rx="2" transform="rotate(70 124 199)"/>
+  </g>
+
+  <!-- Olives -->
+  <use href="#gb02-olive" transform="translate(208 150) rotate(20)"/>
+  <use href="#gb02-olive" transform="translate(224 164) rotate(-30)"/>
+  <use href="#gb02-olive" transform="translate(200 170) rotate(60)"/>
+</svg>

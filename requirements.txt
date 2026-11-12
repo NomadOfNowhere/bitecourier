@@ -1,0 +1,4 @@
+Flask>=3.0
+playwright>=1.40
+gunicorn>=21.0
+tzdata; sys_platform == "win32"   # time zone data, which Windows doesn't ship

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Page not found | BiteCourier{% endblock %}
+
+{% block content %}
+<div class="empty-state">
+  <h1 class="page-title">Page not found</h1>
+  <p>There's no restaurant or order at this address. Order confirmations only open in the browser that placed the order.</p>
+  <a class="button" href="{{ url_for('index') }}">Go to the home page</a>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{# Inline SVG icons. Import with: {% from "_icons.html" import logo_mark, cart_icon %}
+   They use currentColor / CSS variables, so they follow the text color. #}
+
+{# BiteCourier mark: a map pin with a bite taken out of it. Also saved as
+   static/images/favicon.svg; keep the two in sync if you redraw it. #}
+{% macro logo_mark() %}
+  <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+    <mask id="logo-bite">
+      <rect width="32" height="32" fill="#fff"/>
+      <circle cx="25" cy="6" r="5.2" fill="#000"/>
+      <circle cx="28.6" cy="12.4" r="3.6" fill="#000"/>
+      <circle cx="19.2" cy="2.6" r="3.3" fill="#000"/>
+    </mask>
+    <path mask="url(#logo-bite)" fill="currentColor"
+          d="M16 2.5c-6.4 0-11.5 5-11.5 11.2 0 7.9 11.5 15.8 11.5 15.8s11.5-7.9 11.5-15.8C27.5 7.5 22.4 2.5 16 2.5z"/>
+    <circle cx="15" cy="14.2" r="4.6" fill="var(--signal, #FFD25E)"/>
+  </svg>
+{% endmacro %}
+
+{% macro cart_icon() %}
+  <svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"
+       fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2.5 4h2.6l2.4 11h10.4l2.1-8H6.4"/>
+    <circle cx="9" cy="19.2" r="1.4"/>
+    <circle cx="16.8" cy="19.2" r="1.4"/>
+  </svg>
+{% endmacro %}
+
+{# The "Coming soon" panel: the same table as the restaurant covers, with the plates
+   still empty. Only outlines, so it reads as a placeholder. #}
+{% macro empty_table() %}
+  <svg class="restaurant-panel__placeholder" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid slice"
+       aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-dasharray="7 9">
+    <circle cx="300" cy="150" r="104"/>
+    <circle cx="300" cy="150" r="80"/>
+    <rect x="-70" y="96" width="210" height="118" rx="20" transform="rotate(-8 35 155)"/>
+    <circle cx="540" cy="20" r="92"/>
+    <circle cx="540" cy="20" r="70"/>
+    <circle cx="556" cy="262" r="86"/>
+  </svg>
+{% endmacro %}
+
+{# One star in a review rating; star--empty renders just the outline. #}
+{% macro star(filled=true) %}
+  <svg class="star{% if not filled %} star--empty{% endif %}" viewBox="0 0 20 20"
+       aria-hidden="true" focusable="false" fill="currentColor">
+    <path d="M10 1.8l2.5 5.1 5.6.8-4.1 4 1 5.6-5-2.6-5 2.6 1-5.6-4.1-4 5.6-.8z"/>
+  </svg>
+{% endmacro %}

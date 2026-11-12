@@ -1,0 +1,52 @@
+{# Shared building blocks. Import with: {% from "_macros.html" import totals %} #}
+
+{% macro restaurant_style(restaurant) -%}
+  --cover: {{ restaurant.cover_color }}; --accent: {{ restaurant.accent_color }};
+{%- endmacro %}
+
+{% macro totals(subtotal, delivery_fee, total) %}
+  <dl class="totals">
+    <div class="totals__row"><dt>Subtotal</dt><dd>{{ subtotal|money }}</dd></div>
+    <div class="totals__row"><dt>Delivery fee</dt><dd>{{ delivery_fee|money }}</dd></div>
+    <div class="totals__row totals__row--total"><dt>Total</dt><dd>{{ total|money }}</dd></div>
+  </dl>
+{% endmacro %}
+
+{% macro line_list(lines) %}
+  <ul class="line-list">
+    {% for line in lines %}
+      <li class="line-list__row">
+        <span class="line-list__qty">{{ line.quantity }}&times;</span>
+        <span class="line-list__name">{{ line.name }}</span>
+        <span class="line-list__price">{{ line.line_total|money }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+{% endmacro %}
+
+{# One labelled checkout field with its error line.
+   `form` holds .entered, .errors and .max_lengths (built in app.render_checkout). #}
+{% macro form_field(form, name, label, autocomplete, type="text", optional=false, placeholder="", multiline=false, readonly=false, inputmode="") %}
+  {% set error = form.errors.get(name) %}
+  <div class="form-field form-field--{{ name }}">
+    <label class="field-label" for="{{ name }}">
+      {{ label }}{% if optional %} <span class="field-optional">(optional)</span>{% endif %}
+    </label>
+    {% if multiline %}
+      <textarea class="field" id="{{ name }}" name="{{ name }}" rows="2"
+                maxlength="{{ form.max_lengths[name] }}" placeholder="{{ placeholder }}"
+                aria-describedby="{{ name }}-error"
+                {% if error %}aria-invalid="true"{% endif %}>{{ form.entered.get(name, '') }}</textarea>
+    {% else %}
+      <input class="field" id="{{ name }}" name="{{ name }}" type="{{ type }}"
+             value="{{ form.entered.get(name, '') }}"
+             maxlength="{{ form.max_lengths[name] }}" placeholder="{{ placeholder }}"
+             autocomplete="{{ autocomplete }}" aria-describedby="{{ name }}-error"
+             {% if not optional %}required{% endif %}
+             {% if readonly %}readonly{% endif %}
+             {% if inputmode %}inputmode="{{ inputmode }}"{% endif %}
+             {% if error %}aria-invalid="true"{% endif %}>
+    {% endif %}
+    <p class="field-error" id="{{ name }}-error" data-error-for="{{ name }}" {% if not error %}hidden{% endif %}>{{ error or '' }}</p>
+  </div>
+{% endmacro %}

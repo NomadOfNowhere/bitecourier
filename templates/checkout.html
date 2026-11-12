@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% from "_macros.html" import totals, line_list, form_field %}
+
+{% block title %}Checkout | BiteCourier{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Checkout</h1>
+
+<div class="two-column">
+  <form class="checkout-form" method="post" action="{{ url_for('place_order') }}" data-place-order>
+    <fieldset class="form-section">
+      <legend class="form-section__title">Your details</legend>
+      <div class="form-grid">
+        {{ form_field(form, "full_name", "Full name", "name", placeholder="Alex Rivera") }}
+        {{ form_field(form, "phone", "Phone number", "tel", type="tel", placeholder="415 555 0199") }}
+      </div>
+    </fieldset>
+
+    <fieldset class="form-section">
+      <legend class="form-section__title">Delivery address</legend>
+      <p class="form-section__hint">We deliver only within {{ delivery_area.name }}, so the city and state are already set.</p>
+      <div class="form-grid">
+        {{ form_field(form, "street", "Street and number", "address-line1", placeholder="123 Sample Street") }}
+        {{ form_field(form, "unit", "Apartment or suite", "address-line2", optional=true, placeholder="Apt 4B") }}
+        {{ form_field(form, "city", "City", "address-level2", readonly=true) }}
+        {{ form_field(form, "state", "State", "address-level1", readonly=true) }}
+        {{ form_field(form, "postal_code", "ZIP code", "postal-code", placeholder="94110", inputmode="numeric") }}
+        {{ form_field(form, "notes", "Note for the courier", "off", optional=true, multiline=true,
+                      placeholder="Gate code, floor, where to leave the order") }}
+      </div>
+    </fieldset>
+
+    <fieldset class="form-section">
+      <legend class="form-section__title">Payment</legend>
+      <p class="form-section__hint">We only store the last four digits of the card. This is a demo — no charge is made.</p>
+      <div class="form-grid">
+        {{ form_field(form, "card_number", "Card number", "cc-number", placeholder="4242 4242 4242 4242", inputmode="numeric") }}
+        {{ form_field(form, "card_expiry", "Expiration (MM/YY)", "cc-exp", placeholder="08/27", inputmode="numeric") }}
+        {{ form_field(form, "card_cvc", "Security code", "cc-csc", placeholder="123", inputmode="numeric") }}
+      </div>
+    </fieldset>
+
+    <p class="form-error" data-form-error role="alert" {% if not form.errors %}hidden{% endif %}>
+      {%- if form.errors %}Check the highlighted fields.{% endif -%}
+    </p>
+    <button class="button button--block" type="submit">Place order</button>
+  </form>
+
+  <aside class="summary" aria-label="Order summary">
+    <h2 class="summary__title">{{ summary.item_count }} item{{ 's' if summary.item_count != 1 }}</h2>
+    {{ line_list(summary.lines) }}
+    {{ totals(summary.subtotal, summary.delivery_fee, summary.total) }}
+    <a class="summary__edit" href="{{ url_for('view_cart') }}">Edit cart</a>
+  </aside>
+</div>
+{% endblock %}

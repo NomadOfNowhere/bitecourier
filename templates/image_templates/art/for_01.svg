@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240">
+  <title>Margherita Sottile: thin-crust pizza with tomato, mozzarella and basil on a wooden board</title>
+  <defs>
+    <g id="for01-basil">
+      <path d="M0 -12 C9 -9 9 6 0 12 C-9 6 -9 -9 0 -12 Z" fill="#3F8A36"/>
+      <path d="M0 -9 V9" stroke="#2F6C2A" stroke-width="1.2" stroke-linecap="round"/>
+    </g>
+    <ellipse id="for01-mozz" rx="15" ry="12" fill="#FBF6EA" stroke="#F0E2C2" stroke-width="1.2"/>
+  </defs>
+
+  <!-- Wooden board -->
+  <circle cx="167" cy="128" r="106" fill="#1F2A55" opacity="0.10"/>
+  <circle cx="160" cy="120" r="106" fill="#DDBB8C"/>
+  <g fill="none" stroke="#C9A26E" stroke-width="1.2" opacity="0.7">
+    <path d="M62 84 C100 78 140 90 180 82 S240 86 258 84"/>
+    <path d="M56 130 C100 136 150 124 200 132 S250 128 264 132"/>
+    <path d="M70 172 C110 166 160 178 200 170 S240 174 250 172"/>
+  </g>
+
+  <!-- Crust and sauce -->
+  <circle cx="160" cy="120" r="94" fill="#E3B36A" stroke="#C68F45" stroke-width="2"/>
+  <g fill="#B97F3A">
+    <circle cx="160" cy="31" r="3"/><circle cx="238" cy="78" r="2.5"/><circle cx="246" cy="150" r="3"/>
+    <circle cx="188" cy="205" r="2.5"/><circle cx="104" cy="194" r="3"/><circle cx="72" cy="130" r="2.5"/><circle cx="96" cy="56" r="3"/>
+  </g>
+  <circle cx="160" cy="120" r="80" fill="#D9432F"/>
+  <circle cx="160" cy="120" r="80" fill="none" stroke="#E8604A" stroke-width="3"/>
+
+  <!-- Mozzarella -->
+  <use href="#for01-mozz" transform="translate(132 78) rotate(20)"/>
+  <use href="#for01-mozz" transform="translate(196 84) rotate(-30)"/>
+  <use href="#for01-mozz" transform="translate(214 130) rotate(60)"/>
+  <use href="#for01-mozz" transform="translate(178 172) rotate(10)"/>
+  <use href="#for01-mozz" transform="translate(122 164) rotate(-20)"/>
+  <use href="#for01-mozz" transform="translate(104 118) rotate(80)"/>
+  <use href="#for01-mozz" transform="translate(160 124) rotate(-10)"/>
+
+  <!-- Slice cuts -->
+  <g stroke="#9E2C1C" stroke-width="1.4" opacity="0.4">
+    <path d="M73.5 88.5 L246.5 151.5"/><path d="M144 29.4 L176 210.6"/><path d="M230.5 60.8 L89.5 179.2"/>
+  </g>
+
+  <!-- Basil -->
+  <use href="#for01-basil" transform="translate(164 92) rotate(40)"/>
+  <use href="#for01-basil" transform="translate(190 148) rotate(-60)"/>
+  <use href="#for01-basil" transform="translate(134 138) rotate(100)"/>
+  <use href="#for01-basil" transform="translate(206 104) rotate(15)"/>
+  <use href="#for01-basil" transform="translate(118 92) rotate(-35)"/>
+  <use href="#for01-basil" transform="translate(150 178) rotate(70)"/>
+</svg>

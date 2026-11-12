@@ -1,0 +1,49 @@
+<!doctype html>
+{% from "_icons.html" import logo_mark, cart_icon with context %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}BiteCourier{% endblock %}</title>
+  <meta name="description" content="{% block description %}Quality food from exclusive {{ delivery_area.name }} kitchens, delivered. New kitchens join all the time.{% endblock %}">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <p class="service-bar">Delivery is available only within {{ delivery_area.name }}, {{ delivery_area.state }}.</p>
+
+  <header class="site-header">
+    <div class="wrap site-header__inner">
+      <a class="wordmark" href="{{ url_for('index') }}">
+        {{ logo_mark() }}
+        <span>BiteCourier</span>
+      </a>
+      <a class="cart-link" href="{{ url_for('view_cart') }}">
+        {{ cart_icon() }}
+        <span>Cart</span>
+        <span class="cart-count" data-cart-count data-empty="{{ 'true' if cart_count == 0 else 'false' }}">{{ cart_count }}</span>
+        <span class="visually-hidden">items</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <p class="flash flash--{{ category }}" role="status">{{ message }}</p>
+      {% endfor %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">&copy; {{ current_year }} BiteCourier. Food delivery in {{ delivery_area.name }}.</div>
+  </footer>
+
+  <div class="toast" data-toast role="status" aria-live="polite" hidden></div>
+</body>
+</html>

@@ -91,6 +91,37 @@
       resultBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
+    // The summary shows the exact values the server will receive. It is built
+    // from the same FormData the POST uses, not from the visible inputs.
+    const sentList = document.querySelector("[data-sent-list]");
+    const sentFields = [
+      ["full_name", "Name"],
+      ["phone", "Phone"],
+      ["street", "Street"],
+      ["unit", "Apt/suite"],
+      ["postal_code", "ZIP"],
+      ["notes", "Courier note"],
+    ];
+
+    function renderSentDetails() {
+      if (!sentList) return;
+      const data = new FormData(checkoutForm);
+      sentList.replaceChildren();
+      sentFields.forEach(([name, label]) => {
+        const value = String(data.get(name) || "").trim();
+        if (!value) return;
+        const dt = document.createElement("dt");
+        dt.textContent = label;
+        const dd = document.createElement("dd");
+        dd.textContent = value;
+        sentList.append(dt, dd);
+      });
+    }
+
+    renderSentDetails();
+    checkoutForm.addEventListener("input", renderSentDetails);
+    checkoutForm.addEventListener("change", renderSentDetails);
+
     // Show (or clear) the message under each field; returns the first invalid field.
     function showFieldErrors(fields) {
       let firstInvalid = null;

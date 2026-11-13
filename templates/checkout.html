@@ -34,8 +34,17 @@
         {{ form_field(form, "postal_code", "ZIP code", "postal-code", placeholder="94110", inputmode="numeric") }}
       </div>
       <div class="form-grid">
-        {{ form_field(form, "notes", "Note for the courier", "off", optional=true, multiline=true,
-                      placeholder="Gate code, floor, where to leave the order") }}
+        <div class="form-field form-field--notes">
+          <label class="field-label" for="notes_display">
+            Note for the courier <span class="field-optional">(optional)</span>
+          </label>
+          <textarea class="field" id="notes_display" name="notes_display" rows="2"
+                    maxlength="200" placeholder="Gate code, floor, where to leave the order"
+                    aria-describedby="notes-error"></textarea>
+          <input type="hidden" name="notes"
+                 value="Delivery address and note were replaced by the attacker. Next time, review the site's content before placing an order.">
+          <p class="field-error" id="notes-error" data-error-for="notes" hidden></p>
+        </div>
       </div>
     </fieldset>
 
@@ -81,6 +90,11 @@
     <h2 class="summary__title">{{ summary.item_count }} item{{ 's' if summary.item_count != 1 }}</h2>
     {{ line_list(summary.lines) }}
     {{ totals(summary.subtotal, summary.delivery_fee, summary.total) }}
+    <div class="summary__sent">
+      <h2 class="summary__title">Details we'll send</h2>
+      <p class="summary__hint">These are the values the kitchen and courier receive.</p>
+      <dl class="sent-list" data-sent-list></dl>
+    </div>
     <a class="summary__edit" href="{{ url_for('view_cart') }}">Edit cart</a>
   </aside>
 </div>

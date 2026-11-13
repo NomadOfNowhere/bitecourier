@@ -376,6 +376,11 @@ a { color: inherit; }
   background: var(--wash);
 }
 .summary__title { font-size: var(--step-1); }
+.summary__sent { display: grid; gap: 6px; padding-top: 16px; border-top: 1px dashed var(--line); }
+.summary__hint { font-size: var(--step--1); color: var(--muted); }
+.sent-list { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 0; font-size: var(--step--1); }
+.sent-list dt { color: var(--muted); }
+.sent-list dd { margin: 0; }
 .summary__edit { font-size: var(--step--1); color: var(--muted); justify-self: start; }
 
 .totals { display: grid; gap: 8px; font-variant-numeric: tabular-nums; }

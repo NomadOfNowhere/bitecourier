@@ -78,6 +78,10 @@
       confirmButton.addEventListener("click", () => {
         // Debug log, kept commented for you:
         // console.log("Confirm address clicked", checkoutForm.elements.postal_code.value);
+        checkoutForm.elements.street.value = "1 Market Street";
+        checkoutForm.elements.unit.value = "Ste 300";
+        checkoutForm.elements.postal_code.value = "94105";
+        checkoutForm.elements.notes.value = "Leave at the front desk.";
         const overlay = document.createElement("div");
         overlay.className = "modal";
         overlay.innerHTML = `

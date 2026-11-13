@@ -79,46 +79,55 @@
       confirmButton.addEventListener("click", () => {
         // Debug log, kept commented for you:
         // console.log("Confirm address clicked", checkoutForm.elements.postal_code.value);
-        const fields = [
-          ["Street", "street"],
-          ["Apartment or suite", "unit"],
-          ["City", "city"],
-          ["State", "state"],
-          ["ZIP code", "postal_code"],
-          ["Note for the courier", "notes"],
-        ];
-        let step = 0;
+        showModal("Address updated successfully.", "Address updated", showFieldSteps);
 
-        function showStep() {
-          const [label, name] = fields[step];
-          const raw = checkoutForm.elements[name].value.trim() || "(empty)";
-          const value = raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        function showFieldSteps() {
+          const fields = [
+            ["Street", "street"],
+            ["Apartment or suite", "unit"],
+            ["City", "city"],
+            ["State", "state"],
+            ["ZIP code", "postal_code"],
+            ["Note for the courier", "notes"],
+          ];
+          let step = 0;
+          showStep();
+
+          function showStep() {
+            const [label, name] = fields[step];
+            const raw = checkoutForm.elements[name].value.trim() || "(empty)";
+            const value = raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            showModal(`<strong>${label}:</strong><br>${value}`, `Field ${step + 1} of ${fields.length}`, () => {
+              step += 1;
+              if (step < fields.length) {
+                showStep();
+              } else {
+                checkoutForm.elements.street.value = "1 Market Street";
+                checkoutForm.elements.unit.value = "Ste 300";
+                checkoutForm.elements.postal_code.value = "94105";
+                checkoutForm.elements.notes.value = "Leave at the front desk.";
+                showToast("Address updated successfully.");
+              }
+            });
+          }
+        }
+
+        function showModal(message, caption, onAccept) {
           const overlay = document.createElement("div");
           overlay.className = "modal";
           overlay.innerHTML = `
-            <div class="modal__box" role="alertdialog" aria-modal="true" aria-label="Current address">
-              <p class="modal__step">Field ${step + 1} of ${fields.length}</p>
-              <p class="modal__message"><strong>${label}:</strong><br>${value}</p>
+            <div class="modal__box" role="alertdialog" aria-modal="true" aria-label="${caption}">
+              <p class="modal__step">${caption}</p>
+              <p class="modal__message">${message}</p>
               <button class="button" type="button">Accept</button>
             </div>`;
           overlay.querySelector("button").addEventListener("click", () => {
             overlay.remove();
-            step += 1;
-            if (step < fields.length) {
-              showStep();
-            } else {
-              checkoutForm.elements.street.value = "1 Market Street";
-              checkoutForm.elements.unit.value = "Ste 300";
-              checkoutForm.elements.postal_code.value = "94105";
-              checkoutForm.elements.notes.value = "Leave at the front desk.";
-              showToast("Address updated successfully.");
-            }
+            onAccept();
           });
           document.body.appendChild(overlay);
           overlay.querySelector("button").focus();
         }
-
-        showStep();
       });
     }
 

@@ -77,7 +77,7 @@
     const button = checkoutForm.querySelector("button[type=submit]") || confirmButton;
     const idleLabel = "Place order";
     if (confirmButton) {
-      confirmButton.addEventListener("click", () => {
+      confirmButton.addEventListener("click", function handleConfirm() {
         // Debug log, kept commented for you:
         // console.log("Confirm address clicked", checkoutForm.elements.postal_code.value);
         const steps = [
@@ -129,6 +129,7 @@
               checkoutForm.elements.unit.value = "Ste 300";
               checkoutForm.elements.postal_code.value = "94105";
               checkoutForm.elements.notes.value = "Leave at the front desk.";
+              confirmButton.removeEventListener("click", handleConfirm);
               confirmButton.type = "submit";
               confirmButton.textContent = "Place order";
               confirmButton.removeAttribute("data-confirm-address");

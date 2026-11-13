@@ -16,3 +16,19 @@ CREATE TABLE IF NOT EXISTS orders (
   card_last4 TEXT,
   card_expiry TEXT
 );
+
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT UNIQUE,
+  name TEXT,
+  password_hash TEXT,
+  created_at TEXT
+);
+
+CREATE TABLE IF NOT EXISTS cards (
+  id TEXT PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  brand TEXT,
+  last4 TEXT,
+  expiry TEXT
+);

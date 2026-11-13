@@ -8,11 +8,11 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from flask import (
-    Flask, abort, flash, jsonify, redirect, render_template, request, session, url_for,
+    Flask, abort, flash, g, jsonify, redirect, render_template, request, session, url_for,
 )
 
+import accounts
 import cart
-import cards
 import checkout_form
 import config
 import db
@@ -73,7 +73,12 @@ def render_checkout(summary: cart.CartSummary, values=None, errors=None):
         "errors": errors or {},
         "max_lengths": checkout_form.MAX_LENGTHS,
     }
-    return render_template("checkout.html", summary=summary, form=form, cards=cards.get_cards())
+    return render_template(
+        "checkout.html",
+        summary=summary,
+        form=form,
+        cards=accounts.get_cards(g.user["id"]) if g.user else [],
+    )
 
 
 def render_profile(values=None, errors=None):
@@ -82,7 +87,7 @@ def render_profile(values=None, errors=None):
         "errors": errors or {},
         "max_lengths": checkout_form.CARD_MAX_LENGTHS,
     }
-    return render_template("profile.html", form=form, cards=cards.get_cards())
+    return render_template("profile.html", form=form, cards=accounts.get_cards(g.user["id"]))
 
 
 def remember_order(order_id: str) -> None:
@@ -95,12 +100,18 @@ def placed_from_this_browser(order_id: str) -> bool:
     return order_id in session.get(ORDERS_SESSION_KEY, [])
 
 
+@app.before_request
+def load_current_user():
+    g.user = accounts.current_user()
+
+
 @app.context_processor
 def inject_globals():
     return {
         "cart_count": cart.item_count(),
         "delivery_area": config.DELIVERY_AREA,
         "current_year": datetime.now(ZoneInfo(config.TIME_ZONE)).year,
+        "current_user": g.user,
     }
 
 
@@ -177,15 +188,75 @@ def view_cart():
 # --- 5. Checkout -------------------------------------------------------------
 
 
-# --- Profile: saved payment cards --------------------------------------------
+# --- Login and signup ----------------------------------------------------------
+
+@app.get("/login")
+def login():
+    if g.user:
+        return redirect(url_for("profile"))
+    return render_template("login.html", form={"entered": {}, "errors": {}}, mode="login")
+
+
+@app.post("/login")
+def login_post():
+    values = accounts.clean_credentials(request_data())
+    errors = accounts.validate_login(values)
+    if not errors and accounts.authenticate(values) is None:
+        errors["password"] = "Email and password don't match."
+    if errors:
+        return render_template(
+            "login.html", mode="login",
+            form={"entered": {"email": values["email"]}, "errors": errors},
+        ), 400
+    flash("Welcome back!", "success")
+    return redirect(url_for("profile"))
+
+
+@app.get("/signup")
+def signup():
+    if g.user:
+        return redirect(url_for("profile"))
+    return render_template("login.html", form={"entered": {}, "errors": {}}, mode="signup")
+
+
+@app.post("/signup")
+def signup_post():
+    values = accounts.clean_credentials(request_data())
+    errors = accounts.validate_signup(values)
+    if errors:
+        return render_template(
+            "login.html", mode="signup",
+            form={"entered": {"name": values["name"], "email": values["email"]}, "errors": errors},
+        ), 400
+    accounts.create_user(values)
+    flash(f"Welcome to BiteCourier, {values['name'].split()[0]}!", "success")
+    return redirect(url_for("profile"))
+
+
+@app.post("/logout")
+def logout():
+    accounts.log_out()
+    flash("You logged out.", "success")
+    return redirect(url_for("index"))
+
+
+# --- Profile: saved payment cards (login required) ----------------------------
 
 @app.get("/profile")
 def profile():
+    if not g.user:
+        flash("Log in to see your profile.", "error")
+        return redirect(url_for("login"))
     return render_profile()
 
 
 @app.post("/profile/add-card")
 def add_card():
+    if not g.user:
+        if wants_json():
+            return jsonify(error="Log in first."), 401
+        return redirect(url_for("login"))
+
     values = checkout_form.clean_card(request_data())
     errors = checkout_form.validate_card(values)
     if errors:
@@ -193,11 +264,18 @@ def add_card():
             return jsonify(error="Check the highlighted fields.", fields=errors), 400
         return render_profile(values, errors), 400
 
-    card = cards.add_card(
+    card = accounts.add_card(
+        user_id=g.user["id"],
         brand=checkout_form.card_brand(values["card_number"]),
         last4=values["card_number"][-4:],
         expiry=values["card_expiry"],
     )
+    if card is None:
+        message = f"You can save up to {accounts.MAX_CARDS} cards."
+        if wants_json():
+            return jsonify(error=message), 400
+        flash(message, "error")
+        return redirect(url_for("profile"))
 
     if wants_json():
         return jsonify(**card), 201
@@ -207,9 +285,11 @@ def add_card():
 
 @app.post("/profile/remove-card")
 def remove_card():
-    cards.remove_card(str(request_data().get("card_id", "")))
+    if not g.user:
+        return redirect(url_for("login"))
+    accounts.remove_card(g.user["id"], str(request_data().get("card_id", "")))
     if wants_json():
-        return jsonify(cards=cards.get_cards())
+        return jsonify(cards=accounts.get_cards(g.user["id"]))
     flash("Card removed.", "success")
     return redirect(url_for("profile"))
 
@@ -243,8 +323,15 @@ def place_order():
         # No JavaScript: show the form again with what was typed and what to fix.
         return render_checkout(summary, values, errors), 400
 
+    if not g.user:
+        message = "Log in to place your order."
+        if wants_json():
+            return jsonify(error=message), 401
+        flash(message, "error")
+        return redirect(url_for("login"))
+
     card_id = str(request_data().get("card_id", ""))
-    card = cards.get_card(card_id)
+    card = accounts.get_card(g.user["id"], card_id)
     if card is None:
         message = "Choose a payment card. Add one on your profile if the list is empty."
         if wants_json():

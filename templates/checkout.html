@@ -43,7 +43,12 @@
 
     <fieldset class="form-section">
       <legend class="form-section__title">Payment</legend>
-      {% if cards %}
+      {% if not current_user %}
+        <p class="form-section__hint">
+          <a href="{{ url_for('login') }}">Log in</a> or
+          <a href="{{ url_for('signup') }}">create an account</a> to pay with a saved card.
+        </p>
+      {% elif cards %}
         <div class="card-picker" role="radiogroup" aria-label="Payment method">
           {% for card in cards %}
             <label class="card-option">

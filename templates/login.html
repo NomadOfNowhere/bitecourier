@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Sign up' if mode == 'signup' else 'Log in' }} | BiteCourier{% endblock %}
+
+{% block content %}
+<section class="auth">
+  <h1 class="page-title">{{ 'Create your account' if mode == 'signup' else 'Log in' }}</h1>
+
+  <form class="checkout-form auth__form" method="post">
+    <div class="form-grid">
+      {% if mode == 'signup' %}
+        <div class="form-field form-field--full_name">
+          <label class="field-label" for="name">Full name</label>
+          <input class="field" id="name" name="name" type="text" value="{{ form.entered.get('name', '') }}"
+                 maxlength="80" autocomplete="name" required
+                 {% if form.errors.get('name') %}aria-invalid="true"{% endif %}>
+          <p class="field-error" {% if not form.errors.get('name') %}hidden{% endif %}>{{ form.errors.get('name', '') }}</p>
+        </div>
+      {% endif %}
+
+      <div class="form-field form-field--email">
+        <label class="field-label" for="email">Email</label>
+        <input class="field" id="email" name="email" type="email" value="{{ form.entered.get('email', '') }}"
+               maxlength="120" autocomplete="email" required placeholder="you@example.com"
+               {% if form.errors.get('email') %}aria-invalid="true"{% endif %}>
+        <p class="field-error" {% if not form.errors.get('email') %}hidden{% endif %}>{{ form.errors.get('email', '') }}</p>
+      </div>
+
+      <div class="form-field form-field--password">
+        <label class="field-label" for="password">Password{% if mode == 'signup' %} <span class="field-optional">(8+ characters)</span>{% endif %}</label>
+        <input class="field" id="password" name="password" type="password"
+               autocomplete="{{ 'new-password' if mode == 'signup' else 'current-password' }}" required
+               {% if form.errors.get('password') %}aria-invalid="true"{% endif %}>
+        <p class="field-error" {% if not form.errors.get('password') %}hidden{% endif %}>{{ form.errors.get('password', '') }}</p>
+      </div>
+    </div>
+
+    <button class="button button--block" type="submit">
+      {{ 'Create account' if mode == 'signup' else 'Log in' }}
+    </button>
+  </form>
+
+  <p class="auth__switch">
+    {% if mode == 'signup' %}
+      Already have an account? <a href="{{ url_for('login') }}">Log in</a>
+    {% else %}
+      New to BiteCourier? <a href="{{ url_for('signup') }}">Create an account</a>
+    {% endif %}
+  </p>
+</section>
+{% endblock %}

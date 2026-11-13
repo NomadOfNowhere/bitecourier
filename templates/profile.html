@@ -31,7 +31,7 @@
   <form class="checkout-form" method="post" action="{{ url_for('add_card') }}">
     <fieldset class="form-section">
       <legend class="form-section__title">Add a payment card</legend>
-      <p class="form-section__hint">Only the last four digits are kept. This is a demo — no charge is ever made.</p>
+      <p class="form-section__hint">Only the last four digits are kept.</p>
       <div class="form-grid">
         {{ form_field(form, "card_number", "Card number", "cc-number", placeholder="4242 4242 4242 4242", inputmode="numeric") }}
         {{ form_field(form, "card_expiry", "Expiration (MM/YY)", "cc-exp", placeholder="08/27", inputmode="numeric") }}

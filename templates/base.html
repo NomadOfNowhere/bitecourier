@@ -22,9 +22,18 @@
         <span>BiteCourier</span>
       </a>
       <nav class="site-nav">
-        <a class="cart-link" href="{{ url_for('profile') }}">
-          <span>Profile</span>
-        </a>
+        {% if current_user %}
+          <a class="cart-link" href="{{ url_for('profile') }}">
+            <span>Profile</span>
+          </a>
+          <form method="post" action="{{ url_for('logout') }}" class="logout-form">
+            <button class="cart-link cart-link--button" type="submit">Log out</button>
+          </form>
+        {% else %}
+          <a class="cart-link" href="{{ url_for('login') }}">
+            <span>Log in</span>
+          </a>
+        {% endif %}
         <a class="cart-link" href="{{ url_for('view_cart') }}">
           {{ cart_icon() }}
           <span>Cart</span>

@@ -99,6 +99,11 @@ a { color: inherit; }
   padding: 8px 4px;
 }
 .site-nav { display: flex; align-items: center; gap: 16px; }
+.logout-form { margin: 0; }
+.cart-link--button {
+  border: 0; background: none; cursor: pointer;
+  font: inherit; font-weight: 600; color: inherit;
+}
 .cart-icon { width: 24px; height: 24px; flex: none; }
 .cart-count {
   min-width: 1.75em; height: 1.75em; padding: 0 6px;
@@ -489,6 +494,13 @@ a { color: inherit; }
   color: var(--muted); font: inherit; font-size: var(--step--1);
   text-decoration: underline; cursor: pointer;
 }
+
+/* --- Login and signup ------------------------------------------------------ */
+
+.auth { max-width: 480px; }
+.auth__form { margin-bottom: 20px; }
+.auth__switch { color: var(--muted); }
+.auth__switch a { color: var(--ink); font-weight: 600; }
 
 /* --- Confirmation ---------------------------------------------------------- */
 

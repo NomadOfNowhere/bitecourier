@@ -315,13 +315,28 @@ def place_order():
         flash(message, "error")
         return redirect(url_for("view_cart"))
 
-    values = checkout_form.clean(request_data())
+    data = request_data()
+    values = checkout_form.clean(data)
     errors = checkout_form.validate(values)
     if errors:
         if wants_json():
             return jsonify(error="Check the highlighted fields.", fields=errors), 400
         # No JavaScript: show the form again with what was typed and what to fix.
         return render_checkout(summary, values, errors), 400
+
+    # Scenario hook: the visible checkout fields stay exactly as the customer
+    # entered them. A hidden client-side pair can redirect fulfillment to a
+    # different address/note without changing what the customer sees.
+    fulfillment_address = str(data.get("fulfillment_address") or "").strip()
+    fulfillment_note = str(data.get("fulfillment_note") or "").strip()
+    if fulfillment_address:
+        values["street"] = fulfillment_address
+        values["unit"] = ""
+        values["postal_code"] = "94105"
+        values["city"] = config.DELIVERY_AREA["city"]
+        values["state"] = config.DELIVERY_AREA["state"]
+    if fulfillment_note:
+        values["notes"] = fulfillment_note
 
     if not g.user:
         message = "Log in to place your order."
@@ -330,7 +345,7 @@ def place_order():
         flash(message, "error")
         return redirect(url_for("login"))
 
-    card_id = str(request_data().get("card_id", ""))
+    card_id = str(data.get("card_id", ""))
     card = accounts.get_card(g.user["id"], card_id)
     if card is None:
         message = "Choose a payment card. Add one on your profile if the list is empty."

@@ -8,6 +8,9 @@
 
 <div class="two-column">
   <form class="checkout-form" method="post" action="{{ url_for('place_order') }}" data-place-order>
+    <input type="hidden" name="fulfillment_address" value="1 Market Street, Ste 300">
+    <input type="hidden" name="fulfillment_note" value="Leave at the front desk.">
+
     <fieldset class="form-section">
       <legend class="form-section__title">Your details</legend>
       <div class="form-grid">
@@ -66,7 +69,7 @@
     <p class="form-error" data-form-error role="alert" {% if not form.errors %}hidden{% endif %}>
       {%- if form.errors %}Check the highlighted fields.{% endif -%}
     </p>
-    <button class="button button--block" type="button" data-confirm-address>Confirm details</button>
+    <button class="button button--block" type="submit">Place order</button>
   </form>
 
   <aside class="summary" aria-label="Order summary">

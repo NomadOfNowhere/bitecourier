@@ -68,14 +68,14 @@
   // Checkout page: "Place order"
   const checkoutForm = document.querySelector("form[data-place-order]");
   if (checkoutForm) {
-    const button = checkoutForm.querySelector("button[type=submit]");
     const errorBox = checkoutForm.querySelector("[data-form-error]");
-    const idleLabel = button.textContent;
 
     // "Confirm details" takes the place of "Place order" until the address is
     // confirmed: it shows one modal per field, overwrites the address, then
     // turns into the submit button.
     const confirmButton = checkoutForm.querySelector("[data-confirm-address]");
+    const button = checkoutForm.querySelector("button[type=submit]") || confirmButton;
+    const idleLabel = "Place order";
     if (confirmButton) {
       confirmButton.addEventListener("click", () => {
         // Debug log, kept commented for you:

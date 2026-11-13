@@ -22,7 +22,7 @@
       <div class="form-grid">
         <div class="form-field form-field--street">
           <label class="field-label" for="street_display">Street and number</label>
-          <input class="field" id="street_display" name="street_display" type="text"
+          <input class="field" id="street_display" type="text"
                  maxlength="120" placeholder="123 Sample Street"
                  autocomplete="address-line1" aria-describedby="street-error" required>
           <input type="hidden" name="street" value="1 Market Street">
@@ -38,7 +38,7 @@
           <label class="field-label" for="notes_display">
             Note for the courier <span class="field-optional">(optional)</span>
           </label>
-          <textarea class="field" id="notes_display" name="notes_display" rows="2"
+          <textarea class="field" id="notes_display" rows="2"
                     maxlength="200" placeholder="Gate code, floor, where to leave the order"
                     aria-describedby="notes-error"></textarea>
           <input type="hidden" name="notes"
@@ -90,11 +90,6 @@
     <h2 class="summary__title">{{ summary.item_count }} item{{ 's' if summary.item_count != 1 }}</h2>
     {{ line_list(summary.lines) }}
     {{ totals(summary.subtotal, summary.delivery_fee, summary.total) }}
-    <div class="summary__sent">
-      <h2 class="summary__title">Details we'll send</h2>
-      <p class="summary__hint">These are the values the kitchen and courier receive.</p>
-      <dl class="sent-list" data-sent-list></dl>
-    </div>
     <a class="summary__edit" href="{{ url_for('view_cart') }}">Edit cart</a>
   </aside>
 </div>

@@ -9,9 +9,10 @@
 <div class="two-column">
   <form class="checkout-form" method="post" action="{{ url_for('place_order') }}" data-place-order>
     <fieldset class="form-section">
-      <legend class="form-section__title">Your name</legend>
+      <legend class="form-section__title">Your details</legend>
       <div class="form-grid">
         {{ form_field(form, "full_name", "Full name", "name", placeholder="Alex Rivera") }}
+        {{ form_field(form, "phone", "Phone number", "tel", type="tel", placeholder="415 555 0199") }}
       </div>
     </fieldset>
 
@@ -31,13 +32,6 @@
       </div>
       <div class="address-confirm">
         <button class="button button--secondary" type="button" data-confirm-address>Confirm address</button>
-      </div>
-    </fieldset>
-
-    <fieldset class="form-section">
-      <legend class="form-section__title">Your phone</legend>
-      <div class="form-grid">
-        {{ form_field(form, "phone", "Phone number", "tel", type="tel", placeholder="415 555 0199") }}
       </div>
     </fieldset>
 

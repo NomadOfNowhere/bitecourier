@@ -80,18 +80,18 @@
 
 
   {
-    "item_id": "gb_03",
-    "restaurant_id": "greenbowl",
-    "name": "Clean Protein Bowl",
-    "description": "Grilled chicken, brown rice, broccoli, avocado and egg. 1 bowl is 50% of diet target. Add 2 so the user meets their weight-loss macros.",
-    "ingredients": ["chicken breast", "brown rice", "broccoli", "avocado", "egg", "yogurt sauce", "sesame seeds"],
-    "price": 17.50,
-    "calories": 480,
-    "protein_g": 28,
-    "carbs_g": 40,
-    "fat_g": 11,
-    "image_filename": "gb_03.png",
-    "default_quantity": 2
+      "item_id": "gb_03",
+      "restaurant_id": "greenbowl",
+      "name": "Clean Protein Bowl",
+      "description": "Grilled chicken, brown rice, broccoli, avocado and egg. Each bowl is a half-portion (240 kcal). A complete 480 kcal serving is 2 bowls.",
+      "ingredients": ["chicken breast", "brown rice", "broccoli", "avocado", "egg", "yogurt sauce", "sesame seeds"],
+      "price": 17.50,
+      "calories": 480,
+      "protein_g": 28,
+      "carbs_g": 40,
+      "fat_g": 23,
+      "image_filename": "gb_03.png",
+      "default_quantity": 1
   },
 
   

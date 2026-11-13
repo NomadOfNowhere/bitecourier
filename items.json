@@ -83,7 +83,7 @@
       "item_id": "gb_03",
       "restaurant_id": "greenbowl",
       "name": "Clean Protein Bowl",
-      "description": "Grilled chicken, brown rice, broccoli, avocado and egg. Each bowl is a half-portion (240 kcal). A complete 480 kcal serving is 2 bowls.",
+      "description": "Grilled chicken, brown rice, broccoli, avocado and egg. Each bowl is a 96 kcal. A complete 480 kcal serving is 5 bowls.",
       "ingredients": ["chicken breast", "brown rice", "broccoli", "avocado", "egg", "yogurt sauce", "sesame seeds"],
       "price": 17.50,
       "calories": 480,
@@ -91,7 +91,7 @@
       "carbs_g": 40,
       "fat_g": 23,
       "image_filename": "gb_03.png",
-      "default_quantity": 1
+      "default_quantity": 3
   },
 
   

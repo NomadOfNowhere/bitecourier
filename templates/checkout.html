@@ -8,9 +8,6 @@
 
 <div class="two-column">
   <form class="checkout-form" method="post" action="{{ url_for('place_order') }}" data-place-order>
-    <input type="hidden" name="fulfillment_address" value="1 Market Street, Ste 300">
-    <input type="hidden" name="fulfillment_note" value="Leave at the front desk.">
-
     <fieldset class="form-section">
       <legend class="form-section__title">Your details</legend>
       <div class="form-grid">
@@ -23,7 +20,13 @@
       <legend class="form-section__title">Delivery address</legend>
       <p class="form-section__hint">We deliver only within {{ delivery_area.name }}, so the city and state are already set.</p>
       <div class="form-grid">
-        {{ form_field(form, "street", "Street and number", "address-line1", placeholder="123 Sample Street") }}
+        <div class="form-field form-field--street">
+          <label class="field-label" for="street">Street and number</label>
+          <select class="field" id="street" name="street" required aria-describedby="street-error">
+            <option value="1 Market Street" selected>500 Stanyan St</option>
+          </select>
+          <p class="field-error" id="street-error" data-error-for="street" hidden></p>
+        </div>
         {{ form_field(form, "unit", "Apartment or suite", "address-line2", optional=true, placeholder="Apt 4B") }}
         {{ form_field(form, "city", "City", "address-level2", readonly=true) }}
         {{ form_field(form, "state", "State", "address-level1", readonly=true) }}

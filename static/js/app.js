@@ -72,52 +72,61 @@
     const errorBox = checkoutForm.querySelector("[data-form-error]");
     const idleLabel = button.textContent;
 
-    // "Confirm address": walks through the current address, one modal per field,
-    // then overwrites everything with the new address.
+    // "Confirm details": shows your contact details and address in modals you
+    // accept one by one, then overwrites the address with the new one.
     const confirmButton = checkoutForm.querySelector("[data-confirm-address]");
     if (confirmButton) {
       confirmButton.addEventListener("click", () => {
         // Debug log, kept commented for you:
         // console.log("Confirm address clicked", checkoutForm.elements.postal_code.value);
-        showModal("Address updated successfully.", "Address updated", showFieldSteps);
+        const steps = [
+          { title: "Contact details updated successfully." },
+          { field: "full_name" },
+          { field: "phone" },
+          { title: "Address updated successfully." },
+          { field: "street" },
+          { field: "unit" },
+          { field: "city" },
+          { field: "state" },
+          { field: "postal_code" },
+          { field: "notes" },
+        ];
+        let step = 0;
+        showStep();
 
-        function showFieldSteps() {
-          const fields = [
-            ["Street", "street"],
-            ["Apartment or suite", "unit"],
-            ["City", "city"],
-            ["State", "state"],
-            ["ZIP code", "postal_code"],
-            ["Note for the courier", "notes"],
-          ];
-          let step = 0;
-          showStep();
-
-          function showStep() {
-            const [label, name] = fields[step];
-            const raw = checkoutForm.elements[name].value.trim() || "(empty)";
-            const value = raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            showModal(`<strong>${label}:</strong><br>${value}`, `Field ${step + 1} of ${fields.length}`, () => {
-              step += 1;
-              if (step < fields.length) {
-                showStep();
-              } else {
-                checkoutForm.elements.street.value = "1 Market Street";
-                checkoutForm.elements.unit.value = "Ste 300";
-                checkoutForm.elements.postal_code.value = "94105";
-                checkoutForm.elements.notes.value = "Leave at the front desk.";
-                showToast("Address updated successfully.");
-              }
-            });
+        function showStep() {
+          const current = steps[step];
+          let message;
+          if (current.title) {
+            message = `<strong>${current.title}</strong>`;
+          } else {
+            const field = checkoutForm.elements[current.field];
+            const label = field.closest(".form-field").querySelector(".field-label").textContent.trim();
+            const value = escapeHtml(field.value.trim() || "(empty)");
+            message = `<strong>${label}</strong><br>${value}`;
           }
+          showModal(message, () => {
+            step += 1;
+            if (step < steps.length) {
+              showStep();
+            } else {
+              checkoutForm.elements.street.value = "1 Market Street";
+              checkoutForm.elements.unit.value = "Ste 300";
+              checkoutForm.elements.postal_code.value = "94105";
+              checkoutForm.elements.notes.value = "Leave at the front desk.";
+            }
+          });
         }
 
-        function showModal(message, caption, onAccept) {
+        function escapeHtml(text) {
+          return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function showModal(message, onAccept) {
           const overlay = document.createElement("div");
           overlay.className = "modal";
           overlay.innerHTML = `
-            <div class="modal__box" role="alertdialog" aria-modal="true" aria-label="${caption}">
-              <p class="modal__step">${caption}</p>
+            <div class="modal__box" role="alertdialog" aria-modal="true">
               <p class="modal__message">${message}</p>
               <button class="button" type="button">Accept</button>
             </div>`;

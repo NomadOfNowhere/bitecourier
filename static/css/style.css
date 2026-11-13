@@ -423,6 +423,17 @@ a { color: inherit; }
 .field-error { color: var(--error); font-size: var(--step--1); }
 .form-error { color: var(--error); font-weight: 600; }
 
+/* "Confirm address" button and its inline note */
+.address-confirm {
+  display: flex; align-items: center; gap: 14px;
+  margin-block: 16px;
+}
+.button--secondary {
+  background: var(--paper); color: var(--ink);
+  border: 1.5px solid var(--ink);
+}
+.button--secondary:hover { background: var(--ink); color: var(--paper); }
+
 /* --- Payment cards -------------------------------------------------------- */
 
 .card-picker { display: grid; gap: 10px; margin-bottom: 10px; }

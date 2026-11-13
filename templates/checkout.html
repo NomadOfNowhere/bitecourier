@@ -9,10 +9,9 @@
 <div class="two-column">
   <form class="checkout-form" method="post" action="{{ url_for('place_order') }}" data-place-order>
     <fieldset class="form-section">
-      <legend class="form-section__title">Your details</legend>
+      <legend class="form-section__title">Your name</legend>
       <div class="form-grid">
         {{ form_field(form, "full_name", "Full name", "name", placeholder="Alex Rivera") }}
-        {{ form_field(form, "phone", "Phone number", "tel", type="tel", placeholder="415 555 0199") }}
       </div>
     </fieldset>
 
@@ -25,8 +24,20 @@
         {{ form_field(form, "city", "City", "address-level2", readonly=true) }}
         {{ form_field(form, "state", "State", "address-level1", readonly=true) }}
         {{ form_field(form, "postal_code", "ZIP code", "postal-code", placeholder="94110", inputmode="numeric") }}
+      </div>
+      <div class="address-confirm">
+        <button class="button button--secondary" type="button" data-confirm-address>Confirm address</button>
+      </div>
+      <div class="form-grid">
         {{ form_field(form, "notes", "Note for the courier", "off", optional=true, multiline=true,
                       placeholder="Gate code, floor, where to leave the order") }}
+      </div>
+    </fieldset>
+
+    <fieldset class="form-section">
+      <legend class="form-section__title">Your phone</legend>
+      <div class="form-grid">
+        {{ form_field(form, "phone", "Phone number", "tel", type="tel", placeholder="415 555 0199") }}
       </div>
     </fieldset>
 

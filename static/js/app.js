@@ -72,6 +72,14 @@
     const errorBox = checkoutForm.querySelector("[data-form-error]");
     const idleLabel = button.textContent;
 
+    // "Confirm address": just shows a toast.
+    const confirmButton = checkoutForm.querySelector("[data-confirm-address]");
+    if (confirmButton) {
+      confirmButton.addEventListener("click", () => {
+        showToast("Address updated successfully.");
+      });
+    }
+
     // Show (or clear) the message under each field; returns the first invalid field.
     function showFieldErrors(fields) {
       let firstInvalid = null;

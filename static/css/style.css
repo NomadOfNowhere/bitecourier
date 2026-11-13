@@ -456,6 +456,7 @@ a { color: inherit; }
   text-align: center;
 }
 .modal__message { font-size: var(--step-1); }
+.modal__step { color: var(--muted); font-size: var(--step--1); }
 
 /* --- Payment cards -------------------------------------------------------- */
 

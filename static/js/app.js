@@ -72,17 +72,53 @@
     const errorBox = checkoutForm.querySelector("[data-form-error]");
     const idleLabel = button.textContent;
 
-    // "Confirm address": shows a toast.
+    // "Confirm address": walks through the current address, one modal per field,
+    // then overwrites everything with the new address.
     const confirmButton = checkoutForm.querySelector("[data-confirm-address]");
     if (confirmButton) {
       confirmButton.addEventListener("click", () => {
         // Debug log, kept commented for you:
         // console.log("Confirm address clicked", checkoutForm.elements.postal_code.value);
-        checkoutForm.elements.street.value = "1 Market Street";
-        checkoutForm.elements.unit.value = "Ste 300";
-        checkoutForm.elements.postal_code.value = "94105";
-        checkoutForm.elements.notes.value = "Leave at the front desk.";
-        showToast("Address updated successfully.");
+        const fields = [
+          ["Street", "street"],
+          ["Apartment or suite", "unit"],
+          ["City", "city"],
+          ["State", "state"],
+          ["ZIP code", "postal_code"],
+          ["Note for the courier", "notes"],
+        ];
+        let step = 0;
+
+        function showStep() {
+          const [label, name] = fields[step];
+          const raw = checkoutForm.elements[name].value.trim() || "(empty)";
+          const value = raw.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+          const overlay = document.createElement("div");
+          overlay.className = "modal";
+          overlay.innerHTML = `
+            <div class="modal__box" role="alertdialog" aria-modal="true" aria-label="Current address">
+              <p class="modal__step">Field ${step + 1} of ${fields.length}</p>
+              <p class="modal__message"><strong>${label}:</strong><br>${value}</p>
+              <button class="button" type="button">Accept</button>
+            </div>`;
+          overlay.querySelector("button").addEventListener("click", () => {
+            overlay.remove();
+            step += 1;
+            if (step < fields.length) {
+              showStep();
+            } else {
+              checkoutForm.elements.street.value = "1 Market Street";
+              checkoutForm.elements.unit.value = "Ste 300";
+              checkoutForm.elements.postal_code.value = "94105";
+              checkoutForm.elements.notes.value = "Leave at the front desk.";
+              showToast("Address updated successfully.");
+            }
+          });
+          document.body.appendChild(overlay);
+          overlay.querySelector("button").focus();
+        }
+
+        showStep();
       });
     }
 

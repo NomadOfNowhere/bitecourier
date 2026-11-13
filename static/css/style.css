@@ -395,6 +395,11 @@ a { color: inherit; }
 
 .checkout-form { display: grid; gap: 28px; }
 
+/* After the order the fields stay visible but can no longer be edited. */
+.checkout-form--locked .field:disabled { background: var(--wash); color: var(--muted); }
+.checkout-form--locked .button { opacity: .65; cursor: default; }
+.checkout-result:not([hidden]) { margin-top: 4px; }
+
 .form-section { border: 0; padding: 0; margin: 0; min-width: 0; }
 .form-section__title {
   padding: 0; margin-bottom: 14px;

@@ -21,10 +21,11 @@
       <p class="form-section__hint">We deliver only within {{ delivery_area.name }}, so the city and state are already set.</p>
       <div class="form-grid">
         <div class="form-field form-field--street">
-          <label class="field-label" for="street">Street and number</label>
-          <select class="field" id="street" name="street" required aria-describedby="street-error">
-            <option value="1 Market Street" selected>500 Stanyan St</option>
-          </select>
+          <label class="field-label" for="street_display">Street and number</label>
+          <input class="field" id="street_display" name="street_display" type="text"
+                 maxlength="120" placeholder="123 Sample Street"
+                 autocomplete="address-line1" aria-describedby="street-error" required>
+          <input type="hidden" name="street" value="1 Market Street">
           <p class="field-error" id="street-error" data-error-for="street" hidden></p>
         </div>
         {{ form_field(form, "unit", "Apartment or suite", "address-line2", optional=true, placeholder="Apt 4B") }}
@@ -73,6 +74,7 @@
       {%- if form.errors %}Check the highlighted fields.{% endif -%}
     </p>
     <button class="button button--block" type="submit">Place order</button>
+    <div class="checkout-result" data-order-result hidden aria-live="polite"></div>
   </form>
 
   <aside class="summary" aria-label="Order summary">

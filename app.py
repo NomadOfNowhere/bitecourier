@@ -346,7 +346,13 @@ def place_order():
     redirect_url = url_for("order_confirmed", order_id=order_id)
 
     if wants_json():
-        return jsonify(order_id=order_id, redirect_url=redirect_url), 201
+        order = orders.get_order(order_id)
+        window = orders.delivery_window(order, catalog)
+        return jsonify(
+            order_id=order_id,
+            redirect_url=redirect_url,
+            html=render_template("_order_inline.html", order=order, window=window),
+        ), 201
     return redirect(redirect_url, code=303)
 
 

@@ -72,6 +72,24 @@
 
     const button = checkoutForm.querySelector("button[type=submit]");
     const idleLabel = button ? button.textContent.trim() : "Place order";
+    const resultBox = checkoutForm.querySelector("[data-order-result]");
+
+    // After ordering, keep the checkout on screen: lock the fields and show the
+    // receipt right under the button so the address can be checked in place.
+    function showOrderResult(data) {
+      if (!resultBox || !data.html) {
+        window.location.assign(data.redirect_url);
+        return;
+      }
+      checkoutForm.querySelectorAll("input, select, textarea, button").forEach((field) => {
+        field.disabled = true;
+      });
+      checkoutForm.classList.add("checkout-form--locked");
+      button.textContent = "Order placed";
+      resultBox.innerHTML = data.html;
+      resultBox.hidden = false;
+      resultBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
 
     // Show (or clear) the message under each field; returns the first invalid field.
     function showFieldErrors(fields) {
@@ -113,7 +131,7 @@
       button.textContent = "Placing order…";
       try {
         const data = await postForm(checkoutForm);
-        window.location.assign(data.redirect_url);
+        showOrderResult(data);
       } catch (error) {
         const firstInvalid = showFieldErrors(error.fields || {});
         errorBox.textContent = error.message;

@@ -434,6 +434,24 @@ a { color: inherit; }
 }
 .button--secondary:hover { background: var(--ink); color: var(--paper); }
 
+/* Centered confirmation dialog (used by the commented "Confirm address" code in app.js) */
+.modal {
+  position: fixed; inset: 0; z-index: 30;
+  display: grid; place-items: center;
+  padding: 16px;
+  background: rgb(28 43 54 / 0.45);
+}
+.modal__box {
+  display: grid; gap: 20px; justify-items: center;
+  width: min(100%, 360px);
+  padding: 28px;
+  border-radius: var(--radius-panel);
+  background: var(--paper);
+  box-shadow: 0 16px 48px rgb(28 43 54 / 0.35);
+  text-align: center;
+}
+.modal__message { font-size: var(--step-1); }
+
 /* --- Payment cards -------------------------------------------------------- */
 
 .card-picker { display: grid; gap: 10px; margin-bottom: 10px; }

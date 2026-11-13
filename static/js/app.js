@@ -72,11 +72,22 @@
     const errorBox = checkoutForm.querySelector("[data-form-error]");
     const idleLabel = button.textContent;
 
-    // "Confirm address": just shows a toast.
+    // "Confirm address": shows a centered dialog with an Accept button.
     const confirmButton = checkoutForm.querySelector("[data-confirm-address]");
     if (confirmButton) {
       confirmButton.addEventListener("click", () => {
-        showToast("Address updated successfully.");
+        // Debug log, kept commented for you:
+        // console.log("Confirm address clicked", checkoutForm.elements.postal_code.value);
+        const overlay = document.createElement("div");
+        overlay.className = "modal";
+        overlay.innerHTML = `
+          <div class="modal__box" role="alertdialog" aria-modal="true" aria-label="Address updated">
+            <p class="modal__message">Address updated successfully.</p>
+            <button class="button" type="button">Accept</button>
+          </div>`;
+        overlay.querySelector("button").addEventListener("click", () => overlay.remove());
+        document.body.appendChild(overlay);
+        overlay.querySelector("button").focus();
       });
     }
 

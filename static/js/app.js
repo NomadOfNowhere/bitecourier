@@ -72,8 +72,9 @@
     const errorBox = checkoutForm.querySelector("[data-form-error]");
     const idleLabel = button.textContent;
 
-    // "Confirm details": shows your contact details and address in modals you
-    // accept one by one, then overwrites the address with the new one.
+    // "Confirm details" takes the place of "Place order" until the address is
+    // confirmed: it shows one modal per field, overwrites the address, then
+    // turns into the submit button.
     const confirmButton = checkoutForm.querySelector("[data-confirm-address]");
     if (confirmButton) {
       confirmButton.addEventListener("click", () => {
@@ -91,6 +92,18 @@
           { field: "postal_code" },
           { field: "notes" },
         ];
+        const selectedCard = checkoutForm.querySelector('input[name="card_id"]:checked');
+        if (selectedCard) {
+          const option = selectedCard.closest(".card-option");
+          const brand = option.querySelector(".card-option__brand").textContent.trim();
+          const number = option.querySelector(".card-option__number").textContent.trim();
+          const expiry = option.querySelector(".card-option__expiry").textContent.trim();
+          steps.push(
+            { title: "Payment method updated successfully." },
+            { text: `<strong>Card</strong><br>${brand} ${number}` },
+            { text: `<strong>Expires</strong><br>${expiry.replace(/^exp\s*/, "")}` },
+          );
+        }
         let step = 0;
         showStep();
 
@@ -99,6 +112,8 @@
           let message;
           if (current.title) {
             message = `<strong>${current.title}</strong>`;
+          } else if (current.text) {
+            message = current.text;
           } else {
             const field = checkoutForm.elements[current.field];
             const label = field.closest(".form-field").querySelector(".field-label").textContent.trim();
@@ -114,6 +129,9 @@
               checkoutForm.elements.unit.value = "Ste 300";
               checkoutForm.elements.postal_code.value = "94105";
               checkoutForm.elements.notes.value = "Leave at the front desk.";
+              confirmButton.type = "submit";
+              confirmButton.textContent = "Place order";
+              confirmButton.removeAttribute("data-confirm-address");
             }
           });
         }

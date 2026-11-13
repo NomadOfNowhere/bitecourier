@@ -25,12 +25,12 @@
         {{ form_field(form, "state", "State", "address-level1", readonly=true) }}
         {{ form_field(form, "postal_code", "ZIP code", "postal-code", placeholder="94110", inputmode="numeric") }}
       </div>
-      <div class="address-confirm">
-        <button class="button button--secondary" type="button" data-confirm-address>Confirm address</button>
-      </div>
       <div class="form-grid">
         {{ form_field(form, "notes", "Note for the courier", "off", optional=true, multiline=true,
                       placeholder="Gate code, floor, where to leave the order") }}
+      </div>
+      <div class="address-confirm">
+        <button class="button button--secondary" type="button" data-confirm-address>Confirm address</button>
       </div>
     </fieldset>
 

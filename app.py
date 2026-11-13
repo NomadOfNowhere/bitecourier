@@ -12,6 +12,7 @@ from flask import (
 )
 
 import cart
+import cards
 import checkout_form
 import config
 import db
@@ -72,7 +73,16 @@ def render_checkout(summary: cart.CartSummary, values=None, errors=None):
         "errors": errors or {},
         "max_lengths": checkout_form.MAX_LENGTHS,
     }
-    return render_template("checkout.html", summary=summary, form=form)
+    return render_template("checkout.html", summary=summary, form=form, cards=cards.get_cards())
+
+
+def render_profile(values=None, errors=None):
+    form = {
+        "entered": values or {},
+        "errors": errors or {},
+        "max_lengths": checkout_form.CARD_MAX_LENGTHS,
+    }
+    return render_template("profile.html", form=form, cards=cards.get_cards())
 
 
 def remember_order(order_id: str) -> None:
@@ -166,6 +176,44 @@ def view_cart():
 
 # --- 5. Checkout -------------------------------------------------------------
 
+
+# --- Profile: saved payment cards --------------------------------------------
+
+@app.get("/profile")
+def profile():
+    return render_profile()
+
+
+@app.post("/profile/add-card")
+def add_card():
+    values = checkout_form.clean_card(request_data())
+    errors = checkout_form.validate_card(values)
+    if errors:
+        if wants_json():
+            return jsonify(error="Check the highlighted fields.", fields=errors), 400
+        return render_profile(values, errors), 400
+
+    card = cards.add_card(
+        brand=checkout_form.card_brand(values["card_number"]),
+        last4=values["card_number"][-4:],
+        expiry=values["card_expiry"],
+    )
+
+    if wants_json():
+        return jsonify(**card), 201
+    flash(f"Saved your {card['brand']} ending in {card['last4']}.", "success")
+    return redirect(url_for("profile"))
+
+
+@app.post("/profile/remove-card")
+def remove_card():
+    cards.remove_card(str(request_data().get("card_id", "")))
+    if wants_json():
+        return jsonify(cards=cards.get_cards())
+    flash("Card removed.", "success")
+    return redirect(url_for("profile"))
+
+
 @app.get("/checkout")
 def checkout():
     summary = current_summary()
@@ -195,7 +243,16 @@ def place_order():
         # No JavaScript: show the form again with what was typed and what to fix.
         return render_checkout(summary, values, errors), 400
 
-    order_id = orders.create_order(summary, checkout_form.delivery_details(values))
+    card_id = str(request_data().get("card_id", ""))
+    card = cards.get_card(card_id)
+    if card is None:
+        message = "Choose a payment card. Add one on your profile if the list is empty."
+        if wants_json():
+            return jsonify(error=message, fields={"card_id": message}), 400
+        flash(message, "error")
+        return redirect(url_for("checkout"))
+
+    order_id = orders.create_order(summary, checkout_form.delivery_details(values), card)
     remember_order(order_id)
     cart.clear()
     redirect_url = url_for("order_confirmed", order_id=order_id)

@@ -21,12 +21,17 @@
         {{ logo_mark() }}
         <span>BiteCourier</span>
       </a>
-      <a class="cart-link" href="{{ url_for('view_cart') }}">
-        {{ cart_icon() }}
-        <span>Cart</span>
-        <span class="cart-count" data-cart-count data-empty="{{ 'true' if cart_count == 0 else 'false' }}">{{ cart_count }}</span>
-        <span class="visually-hidden">items</span>
-      </a>
+      <nav class="site-nav">
+        <a class="cart-link" href="{{ url_for('profile') }}">
+          <span>Profile</span>
+        </a>
+        <a class="cart-link" href="{{ url_for('view_cart') }}">
+          {{ cart_icon() }}
+          <span>Cart</span>
+          <span class="cart-count" data-cart-count data-empty="{{ 'true' if cart_count == 0 else 'false' }}">{{ cart_count }}</span>
+          <span class="visually-hidden">items</span>
+        </a>
+      </nav>
     </div>
   </header>
 

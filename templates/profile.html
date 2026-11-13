@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "_macros.html" import form_field %}
+
+{% block title %}Your profile | BiteCourier{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Your profile</h1>
+
+<div class="two-column">
+  <section aria-label="Saved cards">
+    <h2 class="profile-heading">Payment methods</h2>
+    {% if cards %}
+      <ul class="saved-cards">
+        {% for card in cards %}
+          <li class="saved-card">
+            <span class="saved-card__brand">{{ card.brand }}</span>
+            <span class="saved-card__number">&bull;&bull;&bull;&bull; {{ card.last4 }}</span>
+            <span class="saved-card__expiry">exp {{ card.expiry }}</span>
+            <form method="post" action="{{ url_for('remove_card') }}">
+              <input type="hidden" name="card_id" value="{{ card.id }}">
+              <button class="saved-card__remove" type="submit">Remove</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="profile-empty">No cards yet. Add one and it will be ready at checkout.</p>
+    {% endif %}
+  </section>
+
+  <form class="checkout-form" method="post" action="{{ url_for('add_card') }}">
+    <fieldset class="form-section">
+      <legend class="form-section__title">Add a payment card</legend>
+      <p class="form-section__hint">Only the last four digits are kept. This is a demo — no charge is ever made.</p>
+      <div class="form-grid">
+        {{ form_field(form, "card_number", "Card number", "cc-number", placeholder="4242 4242 4242 4242", inputmode="numeric") }}
+        {{ form_field(form, "card_expiry", "Expiration (MM/YY)", "cc-exp", placeholder="08/27", inputmode="numeric") }}
+        {{ form_field(form, "card_cvc", "Security code", "cc-csc", placeholder="123", inputmode="numeric") }}
+      </div>
+    </fieldset>
+
+    <p class="form-error" data-form-error role="alert" {% if not form.errors %}hidden{% endif %}>
+      {%- if form.errors %}Check the highlighted fields.{% endif -%}
+    </p>
+    <button class="button button--block" type="submit">Save card</button>
+  </form>
+</div>
+{% endblock %}

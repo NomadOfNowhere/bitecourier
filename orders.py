@@ -21,7 +21,7 @@ def _new_order_id() -> str:
     return "BC-" + secrets.token_hex(4).upper()
 
 
-def create_order(summary: CartSummary, details: DeliveryDetails) -> str:
+def create_order(summary: CartSummary, details: DeliveryDetails, card: dict) -> str:
     """Insert the order and return its public order_id."""
     cart_json = json.dumps([line.to_dict() for line in summary.lines])
     # Stored in UTC so the value means the same on any server; shown in LOCAL_TIME.
@@ -35,13 +35,13 @@ def create_order(summary: CartSummary, details: DeliveryDetails) -> str:
                 """
                 INSERT INTO orders
                     (order_id, cart_json, address, subtotal, delivery_fee, total, timestamp,
-                     customer_name, phone, delivery_notes, card_last4, card_expiry)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     customer_name, phone, delivery_notes, card_brand, card_last4, card_expiry)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (order_id, cart_json, details.address, summary.subtotal,
                  summary.delivery_fee, summary.total, placed_at,
                  details.full_name, details.phone, details.notes,
-                 details.card_last4, details.card_expiry),
+                 card["brand"], card["last4"], card["expiry"]),
             )
             db.commit()
             return order_id

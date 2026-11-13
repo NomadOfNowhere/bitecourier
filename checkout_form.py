@@ -1,6 +1,6 @@
-"""The delivery details asked for at checkout: cleaning and validation.
-
-Used by both the HTML form and the JSON API, so the rules live in one place.
+"""The delivery details asked for at checkout, plus the card validation shared by
+the profile page. Used by both the HTML forms and the JSON API, so the rules live
+in one place.
 """
 import re
 from dataclasses import dataclass
@@ -19,9 +19,6 @@ MAX_LENGTHS = {
     "state": 60,
     "postal_code": 10,
     "notes": 200,
-    "card_number": 23,      # 16 digits plus spaces, longer for some networks
-    "card_expiry": 5,       # MM/YY
-    "card_cvc": 4,
 }
 OPTIONAL_FIELDS = {"unit", "notes"}
 
@@ -32,9 +29,13 @@ REQUIRED_MESSAGES = {
     "city": "Enter the city.",
     "state": "Enter the state or province.",
     "postal_code": "Enter the ZIP code.",
-    "card_number": "Enter the card number.",
-    "card_expiry": "Enter the expiration date as MM/YY.",
-    "card_cvc": "Enter the security code.",
+}
+
+# Payment cards (profile page)
+CARD_MAX_LENGTHS = {
+    "card_number": 23,      # 16 digits plus spaces, longer for some networks
+    "card_expiry": 5,       # MM/YY
+    "card_cvc": 4,
 }
 
 PHONE_PATTERN = re.compile(r"\+?[\d\s().-]+")
@@ -55,8 +56,6 @@ class DeliveryDetails:
     state: str
     postal_code: str
     notes: str
-    card_last4: str
-    card_expiry: str
 
     @property
     def address(self) -> str:
@@ -80,9 +79,12 @@ def clean(data) -> dict[str, str]:
     # "94110-1234" -> "94110"
     if (zip_plus_4 := ZIP_PLUS_4_PATTERN.fullmatch(values["postal_code"])):
         values["postal_code"] = zip_plus_4.group(1)
+    return values
 
-    # Keep only the digits of the card number; the full number is never stored,
-    # validate() derives card_last4 from it before DeliveryDetails is built.
+
+def clean_card(data) -> dict[str, str]:
+    """Tidy the profile-page card form; keep only the digits of the number."""
+    values = {name: " ".join(str(data.get(name) or "").split()) for name in CARD_MAX_LENGTHS}
     values["card_number"] = re.sub(r"\D", "", values["card_number"])
     return values
 
@@ -111,9 +113,7 @@ def validate(values: dict[str, str]) -> dict[str, str]:
     """Return {field_name: message} for every problem; empty when all is well."""
     errors = {}
 
-    # card_number is checked digit-by-digit below; card_last4 is derived there.
-    length_limits = {k: v for k, v in MAX_LENGTHS.items() if k != "card_number"}
-    for name, max_length in length_limits.items():
+    for name, max_length in MAX_LENGTHS.items():
         value = values[name]
         if not value and name not in OPTIONAL_FIELDS:
             errors[name] = REQUIRED_MESSAGES[name]
@@ -144,31 +144,51 @@ def validate(values: dict[str, str]) -> dict[str, str]:
         elif zip_code not in DELIVERY_AREA["zip_codes"]:
             errors["postal_code"] = f"{zip_code} is outside our delivery area. We only deliver within {area}."
 
-    # Payment card. Everything after this keeps only the last four digits.
-    if "card_number" not in errors:
-        card_number = values["card_number"]
-        if not CARD_DIGITS_PATTERN.fullmatch(card_number):
-            errors["card_number"] = "Enter the 13 to 19 digits on the card."
-        # elif not _luhn_ok(card_number):
-        #     errors["card_number"] = "That card number doesn't look right. Check it and try again."
+    return errors
 
-    if "card_expiry" not in errors:
-        if not CARD_EXPIRY_PATTERN.fullmatch(values["card_expiry"]):
-            errors["card_expiry"] = "Use MM/YY, for example 08/27."
-        elif _expired(values["card_expiry"]):
-            errors["card_expiry"] = "That card has expired."
 
-    if "card_cvc" not in errors and not CARD_CVC_PATTERN.fullmatch(values["card_cvc"]):
+def card_brand(digits: str) -> str:
+    """Best-guess network from the first digits; only used for display."""
+    if digits.startswith("4"):
+        return "Visa"
+    if digits[:2] in {"51", "52", "53", "54", "55"} or 2221 <= int(digits[:4] or 0) <= 2720:
+        return "Mastercard"
+    if digits[:2] in {"34", "37"}:
+        return "American Express"
+    if digits.startswith("6011") or digits.startswith("65"):
+        return "Discover"
+    return "Card"
+
+
+def validate_card(values: dict[str, str]) -> dict[str, str]:
+    """Validate the profile-page card form. Only the last four digits survive."""
+    errors = {}
+
+    card_number = values["card_number"]
+    if not card_number:
+        errors["card_number"] = "Enter the card number."
+    elif not CARD_DIGITS_PATTERN.fullmatch(card_number):
+        errors["card_number"] = "Enter the 13 to 19 digits on the card."
+    # elif not _luhn_ok(card_number):
+    #     errors["card_number"] = "That card number doesn't look right. Check it and try again."
+
+    if not values["card_expiry"]:
+        errors["card_expiry"] = "Enter the expiration date as MM/YY."
+    elif not CARD_EXPIRY_PATTERN.fullmatch(values["card_expiry"]):
+        errors["card_expiry"] = "Use MM/YY, for example 08/27."
+    elif _expired(values["card_expiry"]):
+        errors["card_expiry"] = "That card has expired."
+
+    if not values["card_cvc"]:
+        errors["card_cvc"] = "Enter the security code."
+    elif not CARD_CVC_PATTERN.fullmatch(values["card_cvc"]):
         errors["card_cvc"] = "Enter the 3 or 4 digit code on the back of the card."
-
-    if "card_number" not in errors:
-        values["card_last4"] = values["card_number"][-4:]
 
     return errors
 
 
 def delivery_details(values: dict[str, str]) -> DeliveryDetails:
-    """Build the record stored on the order. The full card number never reaches here."""
+    """Build the record stored on the order."""
     return DeliveryDetails(
         full_name=values["full_name"],
         phone=values["phone"],
@@ -178,6 +198,4 @@ def delivery_details(values: dict[str, str]) -> DeliveryDetails:
         state=values["state"],
         postal_code=values["postal_code"],
         notes=values["notes"],
-        card_last4=values["card_last4"],
-        card_expiry=values["card_expiry"],
     )

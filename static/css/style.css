@@ -98,6 +98,7 @@ a { color: inherit; }
   font-weight: 600; text-decoration: none;
   padding: 8px 4px;
 }
+.site-nav { display: flex; align-items: center; gap: 16px; }
 .cart-icon { width: 24px; height: 24px; flex: none; }
 .cart-count {
   min-width: 1.75em; height: 1.75em; padding: 0 6px;
@@ -421,6 +422,44 @@ a { color: inherit; }
 .field[aria-invalid="true"] { border-color: var(--error); box-shadow: 0 0 0 1px var(--error); }
 .field-error { color: var(--error); font-size: var(--step--1); }
 .form-error { color: var(--error); font-weight: 600; }
+
+/* --- Payment cards -------------------------------------------------------- */
+
+.card-picker { display: grid; gap: 10px; margin-bottom: 10px; }
+.card-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #C7CED3; border-radius: var(--radius-control);
+  cursor: pointer;
+}
+.card-option:has(:checked) { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+.card-option__body { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.card-option__brand { font-weight: 600; }
+.card-option__number { font-variant-numeric: tabular-nums; letter-spacing: 0.05em; }
+.card-option__expiry { color: var(--muted); font-size: var(--step--1); }
+
+.profile-heading {
+  font-family: var(--serif);
+  font-size: var(--step-2);
+  font-weight: 400;
+  margin-bottom: 14px;
+}
+.profile-empty { color: var(--muted); max-width: 44ch; }
+.saved-cards { display: grid; gap: 10px; }
+.saved-card {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: var(--radius-control);
+}
+.saved-card__brand { font-weight: 600; }
+.saved-card__number { font-variant-numeric: tabular-nums; letter-spacing: 0.05em; }
+.saved-card__expiry { color: var(--muted); font-size: var(--step--1); }
+.saved-card__remove {
+  margin-left: auto;
+  border: 0; background: none; padding: 6px 4px;
+  color: var(--muted); font: inherit; font-size: var(--step--1);
+  text-decoration: underline; cursor: pointer;
+}
 
 /* --- Confirmation ---------------------------------------------------------- */
 

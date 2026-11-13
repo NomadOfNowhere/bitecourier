@@ -32,12 +32,28 @@
 
     <fieldset class="form-section">
       <legend class="form-section__title">Payment</legend>
-      <p class="form-section__hint">We only store the last four digits of the card.</p>
-      <div class="form-grid">
-        {{ form_field(form, "card_number", "Card number", "cc-number", placeholder="4242 4242 4242 4242", inputmode="numeric") }}
-        {{ form_field(form, "card_expiry", "Expiration (MM/YY)", "cc-exp", placeholder="08/27", inputmode="numeric") }}
-        {{ form_field(form, "card_cvc", "Security code", "cc-csc", placeholder="123", inputmode="numeric") }}
-      </div>
+      {% if cards %}
+        <div class="card-picker" role="radiogroup" aria-label="Payment method">
+          {% for card in cards %}
+            <label class="card-option">
+              <input type="radio" name="card_id" value="{{ card.id }}" required
+                     {% if loop.first %}checked{% endif %}>
+              <span class="card-option__body">
+                <span class="card-option__brand">{{ card.brand }}</span>
+                <span class="card-option__number">&bull;&bull;&bull;&bull; {{ card.last4 }}</span>
+                <span class="card-option__expiry">exp {{ card.expiry }}</span>
+              </span>
+            </label>
+          {% endfor %}
+        </div>
+        <p class="field-error" data-error-for="card_id" hidden></p>
+        <p class="form-section__hint">Manage cards on <a href="{{ url_for('profile') }}">your profile</a>.</p>
+      {% else %}
+        <p class="form-section__hint">
+          No payment methods saved yet.
+          <a href="{{ url_for('profile') }}">Add a card on your profile</a> to place your order.
+        </p>
+      {% endif %}
     </fieldset>
 
     <p class="form-error" data-form-error role="alert" {% if not form.errors %}hidden{% endif %}>

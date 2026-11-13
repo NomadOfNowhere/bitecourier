@@ -10,6 +10,7 @@ ADDED_COLUMNS = {
     "customer_name": "TEXT",
     "phone": "TEXT",
     "delivery_notes": "TEXT",
+    "card_brand": "TEXT",
     "card_last4": "TEXT",
     "card_expiry": "TEXT",
 }

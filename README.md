@@ -1,10 +1,10 @@
 # BiteCourier
 
 A light-lunch delivery web app for San Francisco:
-browse four restaurants, add dishes to a cart, enter your delivery details, place an
-order and see a confirmation. Flask + SQLite on the server, plain HTML/CSS and a little
-vanilla JS on the client, and Playwright to render the product-card and restaurant-cover
-images from HTML templates.
+browse four restaurants, add dishes to a cart, create an account, save a card, enter your
+delivery details, place an order and see the confirmation inline. Flask + SQLite on the
+server, plain HTML/CSS and a little vanilla JS on the client, and Playwright to render the
+product-card and restaurant-cover images from HTML templates.
 
 ## Quick start
 
@@ -36,22 +36,25 @@ Debug mode exposes Flask's interactive debugger, so only use it on a network you
 app.py                 Routes. Thin: parse the request, call a module, render.
 config.py              Paths, port, delivery fee, limits.
 catalog.py             Loads + validates items.json / restaurants.json; lookups.
+accounts.py            Signup, login, sessions and per-user saved cards.
 cart.py                Session cart ({item_id: qty}) and price calculation.
 checkout_form.py       The checkout fields: cleaning, validation, one-line address.
 orders.py              Create/read orders, order ids, delivery-time estimate.
-db.py                  One SQLite connection per request; creates/upgrades the table.
+db.py                  One SQLite connection per request; creates/upgrades the tables.
 formatting.py          money(), clock(), time_range(); shared with the image script.
 generate_images.py     Renders product cards and restaurant covers to PNG.
 
 items.json             The menu (single source of truth: names, descriptions, prices, nutrition).
 restaurants.json       Restaurant names, slugs, colors, cover image, delivery estimates.
-schema.sql             The orders table.
+schema.sql             The orders, users and cards tables.
 
 templates/
   base.html            Header, flash messages, footer.
   _macros.html         Totals block, line-item list, checkout field, color variables.
   _icons.html          Logo mark and cart icon (inline SVG).
   index.html  restaurant.html  cart.html  checkout.html  order_confirmed.html  404.html
+  login.html  profile.html
+  _order_summary.html  _order_inline.html   Shared receipt (full page and inline)
   image_templates/product_card.html      The 800x600 card design.
   image_templates/restaurant_cover.html  The 1200x600 cover design.
   image_templates/art/                   One illustration per item (<item_id>.svg).
@@ -72,9 +75,15 @@ static/
 | POST | `/add-to-cart` | Adds `item_id` (optional `quantity`) to the session cart |
 | POST | `/cart/update` | Sets a quantity from the cart page; `0` removes the item (extra route) |
 | GET | `/cart` | Lines, quantities, subtotal, delivery fee, total, Checkout button |
-| GET | `/checkout` | Form for name, phone and full delivery address, Place order button |
-| POST | `/api/place-order` | Validates the details, inserts the order, clears the cart, returns the order id |
-| GET | `/order-confirmed/<order_id>` | Items, total, delivery details and estimated delivery window |
+| GET/POST | `/login` | Sign in |
+| GET/POST | `/signup` | Create an account (name, email, password) |
+| POST | `/logout` | Sign out |
+| GET | `/profile` | The logged-in user's saved cards |
+| POST | `/profile/add-card` | Save a card (brand, last four, expiry) |
+| POST | `/profile/remove-card` | Remove one of the user's cards |
+| GET | `/checkout` | Form for name, phone, full delivery address, note and saved card |
+| POST | `/api/place-order` | Requires a logged-in user and a saved card; validates, inserts the order, clears the cart |
+| GET | `/order-confirmed/<order_id>` | No-JS confirmation: items, total, delivery details and estimated delivery window |
 
 `/add-to-cart` and `/api/place-order` accept a regular form post **or** JSON, and
 answer the same way the caller asked:
@@ -82,16 +91,25 @@ answer the same way the caller asked:
 - Browser form post (no JavaScript): redirect. Place order uses `303 See Other` to
   `/order-confirmed/<order_id>`.
 - `Accept: application/json` or a JSON body: JSON. Place order returns
-  `201 {"order_id": "BC-7F3A91C2", "redirect_url": "/order-confirmed/BC-7F3A91C2"}`
-  and `app.js` follows `redirect_url`.
+  `201 {"order_id": "BC-7F3A91C2", "redirect_url": "/order-confirmed/BC-7F3A91C2",
+  "html": "<the rendered receipt>"}`. `app.js` inserts `html` below the Place order
+  button and disables the form; it only follows `redirect_url` when no `html` is sent.
+
+Place-order requires a logged-in user and one of that user's saved cards (`card_id`).
+`/profile/add-card` returns the new card's `id` when asked for JSON:
 
 ```bash
+curl -c jar -b jar -d 'name=Alex+Rivera&email=alex@example.com&password=correct-horse' \
+  localhost:8080/signup
+curl -c jar -b jar -H 'Accept: application/json' \
+  -d 'card_number=4242424242424242&card_expiry=08/30&card_cvc=123' \
+  localhost:8080/profile/add-card
 curl -c jar -b jar -H 'Accept: application/json' -d item_id=sak_01 localhost:8080/add-to-cart
 curl -c jar -b jar -H 'Content-Type: application/json' localhost:8080/api/place-order -d '{
   "full_name": "Alex Rivera", "phone": "555 010 0199",
   "street": "123 Sample Street", "unit": "Apt 4B",
   "city": "San Francisco", "state": "CA", "postal_code": "94110",
-  "notes": "Leave at the door"}'
+  "notes": "Leave at the door", "card_id": "<id from the add-card response>"}'
 ```
 
 ### Checkout fields
@@ -105,6 +123,7 @@ curl -c jar -b jar -H 'Content-Type: application/json' localhost:8080/api/place-
 | `city`, `state` | fixed | must be San Francisco, CA; filled in when left out |
 | `postal_code` | yes | a 5-digit San Francisco ZIP code (`94110-1234` is accepted as `94110`) |
 | `notes` | no | note for the courier, up to 200 characters |
+| `card_id` | yes | id of one of the logged-in user's saved cards (`/profile/add-card` returns it) |
 
 The rules live in `checkout_form.py` and are applied on the server for both the form and
 the JSON API. Invalid input returns `400`: as JSON,
@@ -131,12 +150,21 @@ another city, change the whole block.
 - **Cart.** The session cookie only stores `{item_id: quantity}`. Prices and names are
   always read from `items.json` at render time, so the cookie can't change what an
   order costs. Quantities are capped at `MAX_QUANTITY_PER_ITEM`.
+- **Accounts and cards.** Signup/login stores users in `users`; saved cards live in
+  `cards` (`id`, `brand`, `last4`, `expiry` — never the full number). Cards belong to
+  the user, not to the browser session. Checkout requires a logged-in user and one of
+  their saved cards.
 - **Orders.** `cart_json` stores a snapshot of each line (name, unit price, quantity,
   line total, restaurant), so old confirmations still render if the menu changes.
   `order_id` is random (`BC-` + 8 hex chars) so ids can't be guessed by counting.
-  `address` holds the full address on one line; `customer_name`, `phone` and
-  `delivery_notes` are extra columns. A `data.db` from before they existed is upgraded
-  automatically on start (`db.ADDED_COLUMNS`).
+  `address` holds the full address on one line; `customer_name`, `phone`,
+  `delivery_notes`, `card_brand`, `card_last4` and `card_expiry` are extra columns. A
+  `data.db` from before they existed is upgraded automatically on start
+  (`db.ADDED_COLUMNS`).
+- **Inline confirmation.** With JavaScript, `/api/place-order` returns the rendered
+  receipt in `html`; `app.js` shows it below the Place order button and disables the
+  form. Without JavaScript, the `303` redirect to `/order-confirmed/<order_id>` renders
+  the same receipt as a full page.
 - **Confirmation privacy.** The confirmation page shows a name, phone and address, so it
   only opens in the browser that placed the order (the order id is remembered in the
   session). Any other browser gets a 404, even with the right link.
@@ -217,32 +245,77 @@ font file stored in the repo.
 
 ## Resetting
 
-Delete `data.db` to clear all orders; it is recreated on the next start.
+Delete `data.db` to clear all orders, users and cards; it is recreated on the next start.
+On Railway the database lives on the container filesystem, so every deploy or restart
+starts empty (see below).
 
-## Before deploying
+## Deploying to Railway
 
-The app runs end to end, but these are not done yet:
+The repo includes a `Procfile`:
 
-- **Secret key.** Set `BITECOURIER_SECRET_KEY` to a long random value. The app logs a
-  warning at startup while it is using the built-in development key.
-- **Production server.** `python app.py` starts Flask's development server. Use a WSGI
-  server instead, e.g. `pip install gunicorn` then `gunicorn -b 0.0.0.0:8080 app:app`
-  (on Windows: `waitress-serve --port=8080 app:app`), behind HTTPS, and never set
-  `FLASK_DEBUG=1` there. With HTTPS in place, also set `SESSION_COOKIE_SECURE = True` in
-  `config.py`.
-- **Payment.** Checkout records the order and its total, but nothing charges the customer
-  and the page doesn't say how they pay.
-- **Sales tax and fees.** The total is subtotal + delivery fee; no sales tax is added.
-- **Getting orders to the kitchen.** Orders are only written to `data.db`. Nothing
-  notifies a restaurant or a courier.
-- **Menu data.** Check every price, description, ingredient list and nutrition figure in
-  `items.json` against the real dishes, since customers rely on them (allergies included).
-- **Backups.** `data.db` holds names, phone numbers and addresses: back it up and keep it
-  out of public folders and out of git (it is in `.gitignore`).
+```
+web: gunicorn app:app --bind 0.0.0.0:$PORT
+```
+
+1. `railway login`
+2. `railway init` in this directory, or connect the GitHub repo and set the service's
+   root directory to `scenarios/bitecourier`.
+3. `railway up` (or push to the connected branch).
+4. In the service's **Variables**, set `BITECOURIER_SECRET_KEY` to a long random value:
+
+   ```bash
+   python -c 'import secrets; print(secrets.token_hex(32))'
+   ```
+
+   Do not set `PORT`; Railway injects it. Leave `FLASK_DEBUG` unset.
+5. Generate a domain under **Settings → Networking**.
+
+Railway detects Python from `requirements.txt` and installs Flask + gunicorn. `config.py`
+reads `PORT` from the environment and the `Procfile` binds gunicorn to it. The app creates
+and upgrades `data.db` on start (`db.init_app`).
+
+`static/images/` is committed, so `generate_images.py` and Playwright are **not** needed at
+build or runtime.
+
+### SQLite persistence
+
+`data.db` is on the container's ephemeral filesystem. Every deploy/restart recreates it
+empty, which is the intended clean state for this scenario. If you need orders to survive:
+
+- mount a Railway volume at a path such as `/data`;
+- change `DATABASE` in `config.py` to read an environment variable (for example
+  `BITECOURIER_DATA_DIR`) and point it at that path;
+- do not mount the volume over `/app`, or it will shadow the application code.
+
+### Cookies and HTTPS
+
+Railway terminates TLS. The session cookie is `SameSite=Lax`; `SESSION_COOKIE_SECURE` is
+not enabled by default. To require HTTPS-only cookies, set `SESSION_COOKIE_SECURE = True`
+in `config.py` (or read it from an environment variable). Do not enable it for local HTTP
+testing.
+
+### Health check
+
+There is no `/health` route; Railway's default TCP check is enough. If you add one, point
+it at `/`.
+
+### Production checklist
+
+- [ ] `BITECOURIER_SECRET_KEY` set in Railway (the app logs a warning while using the
+      built-in development key).
+- [ ] `FLASK_DEBUG` not set to `1`.
+- [ ] `SESSION_COOKIE_SECURE = True` if you want HTTPS-only cookies.
+- [ ] `data.db` is not committed (it is in `.gitignore`).
+- [ ] Mount a volume and point `DATABASE` at it if the database must survive redeploys.
+- [ ] Payment is still simulated: the order records a saved card and its last four
+      digits, but nothing charges the customer.
+- [ ] No sales tax is added; the total is subtotal + delivery fee.
+- [ ] Nothing notifies the kitchen or courier; orders only go to `data.db`.
+- [ ] Menu data is checked against the real dishes (allergies included).
 
 ## Ideas for next steps
 
 - CSRF tokens on the POST forms (e.g. Flask-WTF).
 - Tests with `pytest` and Flask's test client.
-- User accounts, so order history survives clearing cookies or switching devices.
+- Order history per account (the `orders` table is not linked to `users` yet).
 - One-restaurant-per-cart rule, like most real delivery apps.
